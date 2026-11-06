@@ -161,13 +161,16 @@ export function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuOpen])
 
+  const pendingScroll = useRef<string | null>(null)
+
   const goTo = (href: string) => {
-    scrollToId(href)
     setActive(href.replace('#', ''))
+    if (menuOpen) pendingScroll.current = href
     setMenuOpen(false)
     if (window.location.hash !== href) {
       window.history.replaceState(null, '', href)
     }
+    if (!menuOpen) scrollToId(href)
   }
 
   return (
@@ -262,7 +265,14 @@ export function Navbar() {
         </div>
       </header>
 
-      <AnimatePresence>
+      <AnimatePresence
+        onExitComplete={() => {
+          const target = pendingScroll.current
+          if (!target) return
+          pendingScroll.current = null
+          scrollToId(target)
+        }}
+      >
         {menuOpen && (
           <motion.div
             ref={menuRef}

@@ -1,3 +1,5 @@
+import { getSmoothScroll } from './smoothScroll'
+
 export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ')
 }
@@ -10,6 +12,15 @@ export function publicAsset(path: string) {
 export function scrollToId(id: string) {
   const element = document.getElementById(id.replace('#', ''))
   if (!element) return
+
+  const lenis = getSmoothScroll()
+  if (lenis) {
+    // Lenis honours the element's `scroll-margin-top`, so sections still clear
+    // the fixed navbar without hard-coding an offset here.
+    lenis.scrollTo(element)
+    return
+  }
+
   element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 

@@ -15,6 +15,7 @@ import { Services } from '@/sections/Services'
 import { Contact } from '@/sections/Contact'
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll'
 import { scrollToId } from '@/lib/utils'
+import { destroySmoothScroll, initSmoothScroll } from '@/lib/smoothScroll'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,6 +26,12 @@ export default function App() {
     setIsLoading(false)
     window.setTimeout(() => setHeroReady(true), 160)
   }, [])
+
+  useEffect(() => {
+    if (isLoading) return
+    initSmoothScroll()
+    return () => destroySmoothScroll()
+  }, [isLoading])
 
   useEffect(() => {
     if (isLoading) return

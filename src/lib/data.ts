@@ -3,13 +3,13 @@ export const site = {
   initials: 'GG',
   role: 'Full-Stack Developer',
   tagline: 'Creative engineer crafting precise, high-performance digital products.',
-  email: 'hello@gosogood.xyz',
+  email: 'soskbwisusgebwkoaaivvsijs@gmail.com',
   location: 'Bangkok, Thailand',
   timezone: 'Asia/Bangkok',
   coordinates: '13.7563° N, 100.5018° E',
   availability: 'Available for select projects',
   github: 'https://github.com/vx7Q',
-  discord: 'gosogood',
+  discord: '_gosogood',
   since: 2020,
 }
 
@@ -25,7 +25,7 @@ export const navItems = [
 
 export const socials = [
   { label: 'GitHub', handle: '@vx7Q', href: 'https://github.com/vx7Q', icon: '/social/github.svg' },
-  { label: 'Discord', handle: 'gosogood', copy: 'gosogood', icon: '/social/discord.svg' },
+  { label: 'Discord', handle: '_gosogood', copy: '_gosogood', icon: '/social/discord.svg' },
   { label: 'X / Twitter', handle: '@gosogood', href: 'https://x.com/gosogood', icon: '/social/x.svg' },
 ] as const
 

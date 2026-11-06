@@ -17,7 +17,6 @@
 
 html {
   position: relative;
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -407,9 +406,6 @@ html.has-custom-cursor * {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {

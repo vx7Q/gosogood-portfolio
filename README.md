@@ -83,8 +83,8 @@ Project source excerpts are in **`src/lib/snippets.ts`**. Labels, copy, and meta
 
 The experience is production-quality, but the identity details are intentionally generic placeholders:
 
-- `hello@gosogood.xyz` — contact email used by the form and footer (make sure this mailbox exists)
-- `https://github.com/vx7Q`, `https://x.com/gosogood`, and Discord `gosogood` — social links
+- `soskbwisusgebwkoaaivvsijs@gmail.com` — contact email used by the form and footer
+- `https://github.com/vx7Q`, `https://x.com/gosogood`, and Discord `_gosogood` — social links
 - `https://gosogood.xyz/` — canonical URL and Open Graph URL in `index.html`
 - Project names, copy, metrics, and experience entries are illustrative portfolio content
 - Copy in `src/lib/snippets.ts` is sample production-style code, not a real repository

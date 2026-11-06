@@ -9,7 +9,6 @@ interface RevealProps {
   y?: number
   duration?: number
   once?: boolean
-  blur?: boolean
 }
 
 export function Reveal({
@@ -19,19 +18,14 @@ export function Reveal({
   y = 28,
   duration = 0.8,
   once = true,
-  blur = true,
 }: RevealProps) {
   const reducedMotion = useReducedMotion()
 
   return (
     <motion.div
       className={cn(className)}
-      initial={
-        reducedMotion
-          ? { opacity: 1 }
-          : { opacity: 0, y, filter: blur ? 'blur(10px)' : 'blur(0px)' }
-      }
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: '-8% 0px' }}
       transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
     >
