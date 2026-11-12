@@ -1,14 +1,6 @@
-import { Mail } from 'lucide-react'
-import { site } from '@/lib/data'
-import { cn, publicAsset } from '@/lib/utils'
-import { useClipboard } from '@/hooks/useClipboard'
-import { Toast } from './Toast'
-
-const iconLinks = [
-  { label: 'GitHub', href: site.github, icon: '/social/github.svg' },
-  { label: 'X / Twitter', href: 'https://x.com/gosogood', icon: '/social/x.svg' },
-  { label: 'Email', href: `mailto:${site.email}`, icon: null },
-]
+import { Github, Instagram, Mail, MessageCircle } from 'lucide-react'
+import { socials } from '@/lib/data'
+import { cn } from '@/lib/utils'
 
 interface SocialLinksProps {
   className?: string
@@ -16,63 +8,53 @@ interface SocialLinksProps {
   showLabels?: boolean
 }
 
-export function SocialLinks({ className, iconClassName, showLabels = false }: SocialLinksProps) {
-  const { copied, copy } = useClipboard()
-
+function XMark({ className }: { className?: string }) {
   return (
-    <>
-      <div className={cn('flex items-center gap-2.5', className)}>
-        {iconLinks.map((link) => (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M4 4l16 16M20 4L4 20"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+const icons = {
+  github: Github,
+  instagram: Instagram,
+  x: XMark,
+  discord: MessageCircle,
+  mail: Mail,
+} as const
+
+export function SocialLinks({ className, iconClassName, showLabels = false }: SocialLinksProps) {
+  return (
+    <div className={cn('flex items-center gap-1.5', className)}>
+      {socials.map((social) => {
+        const Icon = icons[social.icon]
+        const isExternal = ['github', 'instagram', 'x'].includes(social.icon)
+        return (
           <a
-            key={link.label}
-            href={link.href}
-            target={link.href.startsWith('http') ? '_blank' : undefined}
-            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            aria-label={link.label}
+            key={social.label}
+            href={social.href}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noreferrer' : undefined}
+            aria-label={social.label}
             className={cn(
-              'group inline-flex items-center gap-2 rounded-full text-white/40 transition-colors duration-300 hover:text-white',
-              showLabels &&
-                'border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-[10px] uppercase tracking-[0.16em] hover:border-white/20 hover:bg-white/[0.05]',
+              'group inline-flex items-center gap-2 text-pearl/45 transition-colors duration-300 hover:text-pearl',
+              showLabels
+                ? 'rounded-full border border-pearl/[0.09] bg-pearl/[0.02] px-3 py-2 text-[9px] uppercase tracking-[0.1em]'
+                : 'h-8 w-8 justify-center rounded-full hover:bg-pearl/[0.06]',
               iconClassName,
             )}
           >
-            {link.icon ? (
-              <img
-                src={publicAsset(link.icon)}
-                alt=""
-                width={14}
-                height={14}
-                className="h-3.5 w-3.5 opacity-70 brightness-0 invert transition-opacity group-hover:opacity-100"
-              />
-            ) : (
-              <Mail className="h-3.5 w-3.5" strokeWidth={1.5} />
-            )}
-            {showLabels && <span>{link.label}</span>}
+            <Icon className={cn(showLabels ? 'h-3 w-3' : 'h-4 w-4')} strokeWidth={1.6} />
+            {showLabels && <span>{social.label}</span>}
           </a>
-        ))}
-
-        <button
-          type="button"
-          onClick={() => copy(site.discord)}
-          aria-label="Copy Discord handle"
-          className={cn(
-            'group inline-flex items-center gap-2 rounded-full text-white/40 transition-colors duration-300 hover:text-white',
-            showLabels &&
-              'border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-[10px] uppercase tracking-[0.16em] hover:border-white/20 hover:bg-white/[0.05]',
-            iconClassName,
-          )}
-        >
-          <img
-            src={publicAsset('social/discord.svg')}
-            alt=""
-            width={14}
-            height={14}
-            className="h-3.5 w-3.5 opacity-70 brightness-0 invert transition-opacity group-hover:opacity-100"
-          />
-          {showLabels && <span>Discord</span>}
-        </button>
-      </div>
-      <Toast show={copied} message="Discord handle copied" />
-    </>
+        )
+      })}
+    </div>
   )
 }

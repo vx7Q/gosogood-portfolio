@@ -1,50 +1,39 @@
-import { useId } from 'react'
 import { cn } from '@/lib/utils'
 
-export function LogoMark({ className, size = 30 }: { className?: string; size?: number }) {
-  const rawId = useId()
-  const gradientId = `logo-${rawId.replace(/:/g, '')}`
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 40 40"
-      fill="none"
-      aria-hidden="true"
-      className={cn('shrink-0', className)}
-    >
-      <defs>
-        <linearGradient id={gradientId} x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#7FA2FF" />
-          <stop offset="1" stopColor="#B58CFF" />
-        </linearGradient>
-      </defs>
-      <circle cx="20" cy="20" r="12.5" stroke={`url(#${gradientId})`} strokeWidth="1.1" opacity="0.55" />
-      <ellipse
-        cx="20"
-        cy="20"
-        rx="16.5"
-        ry="6.8"
-        transform="rotate(-32 20 20)"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="1.1"
-        opacity="0.9"
-      />
-      <circle cx="20" cy="20" r="4" fill={`url(#${gradientId})`} />
-      <circle cx="31.5" cy="10.5" r="1.4" fill="#F4F6FF" />
-    </svg>
-  )
+interface LogoProps {
+  className?: string
+  markClassName?: string
+  wordmarkClassName?: string
 }
 
-export function Logo({ className, markSize = 30 }: { className?: string; markSize?: number }) {
+export function Logo({ className, markClassName, wordmarkClassName }: LogoProps) {
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <LogoMark size={markSize} />
-      <span className="display text-[1.05rem] font-semibold uppercase tracking-[-0.035em] text-pearl">
-        GOSOGOOD
-        <span className="ml-0.5 align-super font-sans text-[7px] font-normal tracking-normal text-mist">®</span>
+    <a
+      href="#home"
+      className={cn('group flex items-center gap-2.5', className)}
+      aria-label="_gosogood — back to top"
+    >
+      <span
+        className={cn(
+          'relative flex h-8 w-8 shrink-0 items-center justify-center transition-transform duration-500 group-hover:rotate-12',
+          markClassName,
+        )}
+        aria-hidden="true"
+      >
+        <span className="absolute inset-[3px] rounded-full border border-electric/50" />
+        <span className="absolute inset-[9px] rounded-full border border-electric-soft/55" />
+        <span className="absolute inset-[-2px] rotate-[-28deg] rounded-[50%] border border-pearl/15" />
+        <span className="absolute h-1.5 w-1.5 rounded-full bg-electric shadow-[0_0_10px_#6E8BFF]" />
+        <span className="absolute right-1 top-1.5 h-0.5 w-0.5 rounded-full bg-pearl shadow-[0_0_6px_#F2F0E8]" />
       </span>
-    </span>
+      <span
+        className={cn(
+          'font-display text-[17px] font-semibold tracking-[-0.035em] text-pearl',
+          wordmarkClassName,
+        )}
+      >
+        <span className="text-electric">_</span>gosogood
+      </span>
+    </a>
   )
 }

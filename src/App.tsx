@@ -1,75 +1,40 @@
-import { useCallback, useEffect, useState } from 'react'
-import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { GridBackground } from '@/components/ui/GridBackground'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
-import { Cursor } from '@/components/ui/Cursor'
-import { LoadingScreen } from '@/components/ui/LoadingScreen'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/sections/Hero'
 import { About } from '@/sections/About'
-import { Skills } from '@/sections/Skills'
+import { Toolkit } from '@/sections/Toolkit'
 import { Projects } from '@/sections/Projects'
-import { Experience } from '@/sections/Experience'
-import { Services } from '@/sections/Services'
+import { Journey } from '@/sections/Journey'
+import { Skills } from '@/sections/Skills'
 import { Contact } from '@/sections/Contact'
-import { useLockBodyScroll } from '@/hooks/useLockBodyScroll'
-import { scrollToId } from '@/lib/utils'
-import { destroySmoothScroll, initSmoothScroll } from '@/lib/smoothScroll'
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [heroReady, setHeroReady] = useState(false)
-  useLockBodyScroll(isLoading)
-
-  const handleLoaded = useCallback(() => {
-    setIsLoading(false)
-    window.setTimeout(() => setHeroReady(true), 160)
-  }, [])
-
-  useEffect(() => {
-    if (isLoading) return
-    initSmoothScroll()
-    return () => destroySmoothScroll()
-  }, [isLoading])
-
-  useEffect(() => {
-    if (isLoading) return
-    const hash = window.location.hash
-    if (!hash) return
-    const timer = window.setTimeout(() => scrollToId(hash), 900)
-    return () => window.clearTimeout(timer)
-  }, [isLoading])
-
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <a
-        href="#main-content"
-        className="fixed left-4 top-4 z-[210] -translate-y-24 rounded-full bg-pearl px-4 py-2 text-xs font-medium text-ink opacity-0 transition-all focus:translate-y-0 focus:opacity-100"
+        href="#main"
+        className="sr-only z-[200] focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:rounded-full focus:bg-pearl focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:text-ink"
       >
         Skip to content
       </a>
 
       <GridBackground />
       <ScrollProgress />
-      <Cursor />
       <Navbar />
 
-      <AnimatePresence>
-        {isLoading && <LoadingScreen onDone={handleLoaded} />}
-      </AnimatePresence>
-
-      <main id="main-content" className="relative z-10">
-        <Hero ready={heroReady} />
+      <main id="main">
+        <Hero />
         <About />
-        <Skills />
+        <Toolkit />
         <Projects />
-        <Experience />
-        <Services />
+        <Journey />
+        <Skills />
         <Contact />
       </main>
 
       <Footer />
-    </MotionConfig>
+    </>
   )
 }

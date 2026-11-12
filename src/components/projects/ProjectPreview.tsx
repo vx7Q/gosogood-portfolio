@@ -1,270 +1,164 @@
-import { motion } from 'framer-motion'
-import {
-  ArrowUpRight,
-  Command,
-  Lock,
-  MousePointer2,
-  Plus,
-  Search,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { ProjectTheme } from '@/lib/data'
+import type { ProjectId } from '@/lib/data'
 
-const urls: Record<ProjectTheme, string> = {
-  blue: 'nebula.app/overview',
-  violet: 'pulse.team/workspace',
-  pearl: 'aurum.studio/collection',
-}
-
-const glow: Record<ProjectTheme, string> = {
-  blue: 'from-electric/30 via-electric/5 to-violet/20',
-  violet: 'from-violet/30 via-violet/5 to-electric/20',
-  pearl: 'from-[#C9BDFF]/30 via-transparent to-[#7C6BFF]/20',
-}
-
-export function ProjectPreview({
-  theme,
-  className,
-  interactive = false,
-}: {
-  theme: ProjectTheme
+interface ProjectPreviewProps {
+  id: ProjectId
   className?: string
-  interactive?: boolean
-}) {
+}
+
+export function ProjectPreview({ id, className }: ProjectPreviewProps) {
   return (
-    <div className={cn('relative', className)}>
-      <div
-        className={cn('absolute -inset-6 rounded-[32px] bg-gradient-to-br opacity-60 blur-3xl', glow[theme])}
-        aria-hidden="true"
-      />
-
-      <div
-        className={cn(
-          'relative overflow-hidden rounded-2xl border border-white/[0.12] bg-[#0B0D14] shadow-[0_40px_100px_-30px_rgba(0,0,0,0.9)]',
-          interactive && 'transition-transform duration-700 ease-expo group-hover:scale-[1.012]',
-        )}
-      >
-        {/* Browser chrome */}
-        <div className="relative flex h-8 items-center gap-2 border-b border-white/[0.07] bg-[#0D0F16] px-3 sm:h-9">
-          <div className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
-          </div>
-          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-md border border-white/[0.06] bg-white/[0.03] px-3 py-[3px] sm:px-5">
-            <Lock className="h-2 w-2 text-white/25" strokeWidth={2} />
-            <span className="font-mono text-[7px] tracking-[0.02em] text-white/35">{urls[theme]}</span>
-          </div>
-          <div className="ml-auto flex items-center gap-1.5">
-            <span className="h-1 w-1 rounded-full bg-white/15" />
-            <span className="h-1 w-1 rounded-full bg-white/15" />
-          </div>
-        </div>
-
-        <div className="preview-container relative aspect-[16/10] w-full overflow-hidden" aria-hidden="true">
-          {theme === 'blue' && <NebulaPreview />}
-          {theme === 'pearl' && <AurumPreview />}
-          {theme === 'violet' && <PulsePreview />}
-
-          {/* Glass reflection */}
-          <div
-            className="pointer-events-none absolute inset-0 z-30 opacity-40"
-            style={{
-              background:
-                'linear-gradient(115deg, rgba(255,255,255,0.08) 0%, transparent 24%, transparent 72%, rgba(255,255,255,0.03) 100%)',
-            }}
-            aria-hidden="true"
-          />
-        </div>
-      </div>
+    <div
+      className={cn(
+        'preview-shell relative aspect-[16/10] w-full overflow-hidden rounded-[18px] border border-pearl/[0.09] bg-[#07080C]',
+        className,
+      )}
+    >
+      {id === 'portfolio' && <PortfolioPreview />}
+      {id === 'passforge' && <PassForgePreview />}
+      {id === 'warp' && <WarpPreview />}
+      {id === 'landing' && <LandingPreview />}
     </div>
   )
 }
 
-function NebulaPreview() {
+function BrowserBar({ url, tag = 'LIVE' }: { url: string; tag?: string }) {
   return (
-    <div className="relative flex h-full w-full bg-[#070A13] text-white">
-      <div className="pointer-events-none absolute -right-[8%] -top-[30%] h-[75%] w-[55%] rounded-full bg-[#2E5BFF]/[0.14] blur-[40px]" />
-      <div className="pointer-events-none absolute -bottom-[30%] left-[20%] h-[60%] w-[50%] rounded-full bg-[#7C4DFF]/[0.08] blur-[50px]" />
-
-      {/* Sidebar */}
-      <div className="relative z-10 flex h-full w-[16.5%] shrink-0 flex-col border-r border-white/[0.055] bg-[#080B14]/80 p-[2.8%]">
-        <div className="flex items-center gap-[4%]">
-          <span className="flex aspect-square w-[28%] items-center justify-center rounded-[22%] bg-gradient-to-br from-[#6D96FF] to-[#8B5CF6]">
-            <span className="pv-2xs font-bold text-white">N</span>
-          </span>
-          <span className="pv-xs font-medium tracking-[0.08em] text-white/80">nebula</span>
-        </div>
-
-        <div className="mt-[17%] flex flex-col gap-[6%]">
-          {[
-            { label: 'Overview', active: true },
-            { label: 'Analytics', active: false },
-            { label: 'Reports', active: false },
-            { label: 'Customers', active: false },
-            { label: 'Automations', active: false },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className={cn(
-                'flex items-center gap-[7%] rounded-md px-[8%] py-[5%]',
-                item.active ? 'bg-white/[0.07] text-white/85' : 'text-white/30',
-              )}
-            >
-              <span className={cn('aspect-square w-[13%] rounded-[3px]', item.active ? 'bg-[#6D96FF]' : 'bg-white/20')} />
-              <span className="pv-3xs">{item.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-[15%]">
-          <p className="pv-3xs mb-[7%] uppercase tracking-[0.14em] text-white/20">Projects</p>
-          {['Orbit v2', 'Atlas CRM', 'Halo'].map((item) => (
-            <div key={item} className="mb-[6%] flex items-center gap-[7%] text-white/30">
-              <span className="aspect-square w-[7%] rounded-full border border-white/25" />
-              <span className="pv-3xs">{item}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-auto rounded-md border border-white/[0.06] bg-white/[0.025] p-[8%]">
-          <div className="flex items-center gap-[7%]">
-            <span className="h-[5px] w-[5px] rounded-full bg-emerald-300" />
-            <span className="pv-3xs text-white/50">All systems normal</span>
-          </div>
-          <div className="mt-[8%] h-[2px] w-full rounded-full bg-white/[0.06]">
-            <div className="h-full w-[72%] rounded-full bg-emerald-300/60" />
-          </div>
-        </div>
+    <div className="relative z-20 flex h-[9%] items-center gap-[2cqw] border-b border-pearl/[0.07] bg-pearl/[0.015] px-[3.5cqw]">
+      <div className="flex gap-[0.8cqw]" aria-hidden="true">
+        <span className="h-[1cqw] w-[1cqw] rounded-full bg-pearl/15" />
+        <span className="h-[1cqw] w-[1cqw] rounded-full bg-pearl/15" />
+        <span className="h-[1cqw] w-[1cqw] rounded-full bg-electric/60" />
       </div>
+      <div className="mx-auto flex items-center gap-[1.1cqw] rounded-full border border-pearl/[0.08] bg-pearl/[0.03] px-[2.6cqw] py-[0.65cqw]">
+        <span className="h-[0.75cqw] w-[0.75cqw] rounded-full bg-electric/70" />
+        <span className="font-mono text-[0.95cqw] text-pearl/35">{url}</span>
+      </div>
+      <span className="w-[5cqw] text-right font-mono text-[0.8cqw] text-pearl/20">{tag}</span>
+    </div>
+  )
+}
 
-      {/* Main */}
-      <div className="relative z-10 flex-1 overflow-hidden p-[2.8%]">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="pv-3xs uppercase tracking-[0.18em] text-white/25">Monday, 14 October</p>
-            <p className="pv-lg mt-[2%] font-display font-medium tracking-[-0.02em] text-white/90">
-              Good morning, Alex.
-            </p>
-          </div>
-          <div className="flex items-center gap-[6px]">
-            <span className="flex items-center gap-1 rounded-md border border-white/[0.07] bg-white/[0.03] px-2 py-1 text-white/25">
-              <Search className="h-2 w-2" strokeWidth={1.5} />
-              <span className="pv-3xs">Search</span>
-              <span className="pv-3xs ml-2 rounded border border-white/[0.07] px-[3px] text-white/20">⌘K</span>
-            </span>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[#9C87FF] to-[#4C65DB] pv-3xs font-medium text-white">
-              A
-            </span>
-          </div>
-        </div>
+function PortfolioPreview() {
+  return (
+    <div className="flex h-full flex-col">
+      <BrowserBar url="gosogood.xyz" />
+      <div className="relative flex-1 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-grid-lines opacity-50"
+          style={{ backgroundSize: '4.5cqw 4.5cqw' }}
+          aria-hidden="true"
+        />
 
-        <div className="mt-[3%] grid grid-cols-3 gap-[2%]">
-          {[
-            { label: 'Total revenue', value: '$128.4k', change: '+18.2%', points: '0,28 12,24 24,25 36,16 48,19 60,9 72,13 84,4' },
-            { label: 'Active users', value: '8,429', change: '+6.4%', points: '0,26 12,20 24,22 36,18 48,10 60,14 72,6 84,8' },
-            { label: 'Conversion', value: '4.82%', change: '+1.1%', points: '0,22 12,24 24,14 36,18 48,12 60,16 72,8 84,5' },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-lg border border-white/[0.06] bg-white/[0.025] p-[7%]"
-            >
-              <p className="pv-3xs text-white/30">{stat.label}</p>
-              <div className="mt-[6%] flex items-end justify-between gap-1">
-                <p className="pv-md font-display font-medium tracking-[-0.02em] text-white/90">{stat.value}</p>
-                <span className="flex items-center gap-[2px] rounded-full bg-emerald-300/[0.08] px-1 py-[1px] text-emerald-300/80">
-                  <TrendingUp className="h-1.5 w-1.5" strokeWidth={2} />
-                  <span className="pv-3xs">{stat.change}</span>
+        <div className="relative z-10 flex h-full flex-col">
+          <div className="flex items-center justify-between border-b border-pearl/[0.06] px-[4cqw] py-[1.7cqw]">
+            <div className="flex items-center gap-[0.9cqw]">
+              <span className="relative flex h-[1.6cqw] w-[1.6cqw] items-center justify-center rounded-full border border-electric/50">
+                <span className="h-[0.5cqw] w-[0.5cqw] rounded-full bg-electric" />
+              </span>
+              <span className="text-[1.35cqw] font-semibold tracking-[-0.03em] text-pearl">
+                <span className="text-electric">_</span>gosogood
+              </span>
+            </div>
+            <div className="hidden items-center gap-[2cqw] font-mono text-[0.9cqw] uppercase tracking-[0.1em] text-pearl/30 sm:flex">
+              <span>Work</span>
+              <span>About</span>
+              <span>Journey</span>
+              <span>Contact</span>
+            </div>
+            <span className="rounded-full border border-pearl/[0.12] px-[1.8cqw] py-[0.55cqw] text-[0.85cqw] uppercase tracking-[0.1em] text-pearl/55">
+              Say hello
+            </span>
+          </div>
+
+          <div className="grid flex-1 grid-cols-12 gap-[2cqw] px-[4cqw] pb-[4cqw] pt-[3.4cqw]">
+            <div className="col-span-7">
+              <div className="flex items-center gap-[1cqw]">
+                <span className="font-mono text-[0.85cqw] uppercase tracking-[0.16em] text-pearl/25">
+                  Portfolio — 2026
+                </span>
+                <span className="h-px w-[2.5cqw] bg-pearl/20" />
+                <span className="font-mono text-[0.85cqw] uppercase tracking-[0.16em] text-electric-soft/60">
+                  Web since M.3
                 </span>
               </div>
-              <svg viewBox="0 0 84 32" className="mt-[8%] h-4 w-full" preserveAspectRatio="none" aria-hidden="true">
-                <polyline
-                  points={stat.points}
-                  fill="none"
-                  stroke="#6D96FF"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.7"
-                />
-              </svg>
-            </div>
-          ))}
-        </div>
 
-        <div className="mt-[2%] grid grid-cols-[1.75fr_1fr] gap-[2%]">
-          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-[4%]">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="pv-3xs text-white/30">Revenue pulse</p>
-                <div className="mt-[4%] flex items-baseline gap-2">
-                  <span className="pv-md font-display font-medium tracking-[-0.02em] text-white/90">$128,420</span>
-                  <span className="pv-3xs text-emerald-300/70">+18.2%</span>
+              <p className="mt-[1.7cqw] font-display text-[8.6cqw] font-medium uppercase leading-[0.84] tracking-[-0.06em] text-pearl">
+                <span className="block text-outline">Still in</span>
+                <span className="block">School</span>
+                <span className="mt-[0.5cqw] block font-serif text-[9.4cqw] font-normal italic lowercase leading-[0.8] tracking-[-0.04em] text-gradient">
+                  still building.
+                </span>
+              </p>
+
+              <p className="mt-[2.2cqw] max-w-[34cqw] text-[1.55cqw] leading-[1.6] text-pearl/40">
+                A student in Suphan Buri, learning in public — one honest project at a time.
+              </p>
+
+              <div className="mt-[2.4cqw] flex items-center gap-[1.1cqw]">
+                <span className="inline-flex items-center gap-[0.7cqw] rounded-full bg-pearl px-[2.1cqw] py-[1cqw] text-[1.05cqw] font-medium text-ink">
+                  See work <span className="text-[1.1cqw]">↗</span>
+                </span>
+                <span className="inline-flex items-center gap-[0.7cqw] rounded-full border border-pearl/[0.14] px-[2.1cqw] py-[1cqw] text-[1.05cqw] text-pearl/55">
+                  Say hi <span className="text-[1.1cqw]">↗</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="col-span-5 flex items-start justify-end">
+              <div className="w-full rounded-[2cqw] border border-pearl/[0.1] bg-[#090B11]/90 p-[1.6cqw] shadow-[0_2cqw_6cqw_-2cqw_rgba(0,0,0,0.8)]">
+                <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-[1.2cqw]">
+                  <span className="font-mono text-[0.65cqw] uppercase tracking-[0.16em] text-pearl/25">
+                    Identity / 2026
+                  </span>
+                  <span className="flex items-center gap-[0.5cqw] font-mono text-[0.65cqw] uppercase tracking-[0.12em] text-electric-soft/60">
+                    <span className="h-[0.4cqw] w-[0.4cqw] rounded-full bg-electric" /> Studying
+                  </span>
+                </div>
+                <div className="mt-[1.5cqw] flex items-start justify-between gap-[1cqw]">
+                  <div
+                    className="flex h-[6.2cqw] w-[6.2cqw] items-center justify-center rounded-full text-[2.4cqw] text-pearl/80"
+                    style={{
+                      background:
+                        'radial-gradient(circle at 30% 22%, #ffffff 0%, #dfe6ff 10%, #b7c4ff 20%, #7a97ff 38%, #3b4fc4 58%, #151a3a 78%, #07090d 100%)',
+                      boxShadow: 'inset -0.6cqw -0.8cqw 1.8cqw rgba(0,0,0,0.7)',
+                    }}
+                  >
+                    _
+                  </div>
+                  <div className="text-right">
+                    <span className="inline-flex items-center gap-[0.4cqw] rounded-full border border-electric/20 bg-electric/[0.05] px-[0.9cqw] py-[0.45cqw] font-mono text-[0.55cqw] uppercase tracking-[0.08em] text-electric-soft/65">
+                      <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric" /> Not for hire
+                    </span>
+                    <p className="mt-[1cqw] font-mono text-[0.55cqw] text-pearl/20">SUPHAN BURI · TH</p>
+                  </div>
+                </div>
+                <p className="mt-[1.4cqw] text-[1.45cqw] font-medium tracking-[-0.03em] text-pearl">
+                  <span className="text-electric">_</span>gosogood
+                </p>
+                <p className="mt-[0.3cqw] text-[0.75cqw] text-pearl/35">Student / front-end learner</p>
+                <div className="mt-[1.2cqw] grid grid-cols-2 gap-px overflow-hidden rounded-[0.7cqw] border border-pearl/[0.07] bg-pearl/[0.06]">
+                  {[
+                    ['BASE', 'Suphan Buri'],
+                    ['FOCUS', 'Front-end'],
+                    ['SCHOOL', 'Songphinong'],
+                    ['STATUS', 'Studying'],
+                  ].map(([label, value]) => (
+                    <div key={label} className="bg-[#0B0E14] px-[0.9cqw] py-[0.7cqw]">
+                      <p className="font-mono text-[0.45cqw] uppercase tracking-[0.14em] text-pearl/20">{label}</p>
+                      <p className="mt-[0.2cqw] text-[0.7cqw] text-pearl/55">{value}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <span className="rounded border border-white/[0.07] px-1.5 py-0.5 pv-3xs text-white/30">Last 7 days</span>
-            </div>
-
-            <div className="relative mt-[3%]">
-              <svg viewBox="0 0 320 115" className="h-[68px] w-full sm:h-[90px]" preserveAspectRatio="none" aria-hidden="true">
-                <defs>
-                  <linearGradient id="nebula-chart" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#5B8CFF" stopOpacity="0.32" />
-                    <stop offset="100%" stopColor="#5B8CFF" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                {[26, 54, 82].map((y) => (
-                  <line key={y} x1="0" x2="320" y1={y} y2={y} stroke="rgba(255,255,255,0.05)" strokeDasharray="2 3" />
-                ))}
-                <path
-                  d="M0 94 C18 90 28 78 46 81 S73 63 91 67 S115 50 133 56 S158 66 174 47 S200 32 218 39 S248 27 264 30 S296 14 320 18 L320 115 L0 115 Z"
-                  fill="url(#nebula-chart)"
-                />
-                <motion.path
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-                  d="M0 94 C18 90 28 78 46 81 S73 63 91 67 S115 50 133 56 S158 66 174 47 S200 32 218 39 S248 27 264 30 S296 14 320 18"
-                  fill="none"
-                  stroke="#7FA2FF"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-                <circle cx="320" cy="18" r="2.6" fill="#7FA2FF" />
-                <circle cx="320" cy="18" r="5" fill="#7FA2FF" opacity="0.18" />
-              </svg>
-              <div className="mt-[2%] flex justify-between pv-3xs text-white/20">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                  <span key={day}>{day}</span>
-                ))}
-              </div>
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-lg border border-[#6D8DFF]/20 bg-gradient-to-br from-[#27346B]/45 to-[#131726]/80 p-[5%]">
-            <div className="absolute -right-[20%] -top-[30%] h-[80%] w-[80%] rounded-full bg-[#7B5CFF]/20 blur-[24px]" />
-            <div className="relative flex items-center gap-1.5">
-              <Sparkles className="h-2.5 w-2.5 text-[#A8B9FF]" strokeWidth={1.5} />
-              <span className="pv-3xs uppercase tracking-[0.18em] text-[#A8B9FF]/80">AI insight</span>
-              <span className="pv-3xs ml-auto rounded border border-white/10 px-1 py-[1px] text-white/25">BETA</span>
-            </div>
-            <p className="relative mt-[8%] pv-sm font-display leading-[1.25] text-white/85">
-              Launch traffic converted 31% above baseline.
-            </p>
-            <p className="relative mt-[5%] pv-3xs leading-relaxed text-white/35">
-              Consider shifting 12% of paid budget toward the Tuesday window.
-            </p>
-            <div className="relative mt-[7%] flex flex-wrap gap-1">
-              <span className="rounded-full bg-white/[0.06] px-1.5 py-[2px] pv-3xs text-white/40">Retention +12%</span>
-              <span className="rounded-full bg-white/[0.06] px-1.5 py-[2px] pv-3xs text-white/40">CAC −8%</span>
-            </div>
-            <div className="relative mt-[8%] flex items-center justify-between rounded-md bg-white/[0.07] px-2 py-1.5">
-              <span className="pv-3xs text-white/55">Apply suggestion</span>
-              <ArrowUpRight className="h-2 w-2 text-white/40" strokeWidth={1.5} />
-            </div>
+          <div className="mt-auto flex items-center justify-between border-t border-pearl/[0.06] px-[4cqw] py-[1.3cqw]">
+            <span className="font-mono text-[0.65cqw] uppercase tracking-[0.14em] text-pearl/20">
+              Currently studying — not taking work
+            </span>
+            <span className="font-mono text-[0.65cqw] text-pearl/20">SCROLL ↓</span>
           </div>
         </div>
       </div>
@@ -272,294 +166,437 @@ function NebulaPreview() {
   )
 }
 
-function AurumPreview() {
+function PassForgePreview() {
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#EFE9DF] text-[#1A1720]">
-      <div className="pointer-events-none absolute -right-[10%] -top-[30%] h-[90%] w-[55%] rounded-full bg-[#B7A3FF]/25 blur-[40px]" />
+    <div className="flex h-full flex-col">
+      <BrowserBar url="pass-forge-pro.netlify.app" />
 
-      <div className="relative z-10 flex items-center justify-between border-b border-black/[0.08] px-[4%] py-[2.3%]">
-        <span className="font-display pv-sm font-medium tracking-[0.34em] text-[#1A1720]">AURUM</span>
-        <div className="hidden items-center gap-[2.2vw] pv-3xs uppercase tracking-[0.2em] text-black/45 sm:flex">
-          <span className="text-black/80">Collection</span>
-          <span>Our story</span>
-          <span>Journal</span>
-        </div>
-        <div className="flex items-center gap-[1.2vw] pv-3xs uppercase tracking-[0.14em] text-black/50">
-          <span className="hidden sm:inline">Search</span>
-          <span className="flex items-center gap-1">
-            Bag <span className="flex h-3 w-3 items-center justify-center rounded-full bg-[#1A1720] pv-3xs text-[#EFE9DF]">2</span>
-          </span>
-        </div>
-      </div>
+      <div className="relative flex-1 overflow-hidden bg-[#080A0F]">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background:
+              'radial-gradient(ellipse 55% 55% at 50% 0%, rgba(110,139,255,0.14), transparent 70%)',
+          }}
+          aria-hidden="true"
+        />
 
-      <div className="relative z-10 grid flex-1 grid-cols-[1.05fr_1fr]">
-        <div className="flex flex-col justify-center px-[7%] py-[3%]">
-          <p className="pv-3xs uppercase tracking-[0.24em] text-black/35">No. 07 — Eau de parfum</p>
-          <p className="font-serif pv-hero mt-[5%] leading-[0.98] tracking-[-0.03em] text-[#191620]">
-            The art of
-            <br />
-            <span className="italic text-[#574D70]">quiet presence.</span>
-          </p>
-          <p className="mt-[6%] max-w-[90%] pv-3xs leading-[1.7] text-black/45">
-            A study in smoked cedar, iris root, and soft leather. Composed in Grasse, bottled in
-            small batches.
-          </p>
-          <div className="mt-[7%] flex items-center gap-[4%]">
-            <span className="flex items-center justify-center rounded-full bg-[#191620] px-[7%] py-[3.5%] pv-3xs uppercase tracking-[0.16em] text-[#F4EFE8]">
-              Add to bag — $185
-            </span>
-            <span className="pv-3xs uppercase tracking-[0.12em] text-black/35">50 ml</span>
-          </div>
-          <div className="mt-[9%] flex items-center gap-[5%] border-t border-black/[0.08] pt-[4%]">
-            {['Complimentary shipping', 'Carbon neutral'].map((item) => (
-              <span key={item} className="pv-3xs text-black/30">
-                {item}
+        <div className="relative z-10 flex h-full flex-col px-[3.2cqw] pb-[2.4cqw]">
+          <div className="flex items-center justify-between border-b border-pearl/[0.07] py-[1.3cqw]">
+            <div className="flex items-center gap-[0.9cqw]">
+              <span className="flex h-[2.1cqw] w-[2.1cqw] items-center justify-center rounded-[0.55cqw] bg-gradient-to-br from-electric-soft to-electric text-ink">
+                <svg viewBox="0 0 24 24" fill="none" className="h-[1.1cqw] w-[1.1cqw]" aria-hidden="true">
+                  <path
+                    d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12v10H6z"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="relative flex items-center justify-center overflow-hidden border-l border-black/[0.06] bg-[#E7E0D4]">
-          <div className="absolute inset-0 bg-grid-lines bg-[size:40px_40px] opacity-[0.12]" />
-          <div className="absolute h-[64%] w-[64%] rounded-full bg-gradient-to-br from-white/80 via-[#D6CBF0] to-[#8676A9] opacity-70 blur-[2px]" />
-          <div className="absolute h-[58%] w-[58%] rounded-full border border-white/50" />
-          <div className="absolute bottom-[12%] left-1/2 h-[5%] w-[40%] -translate-x-1/2 rounded-full bg-black/20 blur-md" />
-
-          <div className="relative z-10 flex h-[62%] w-[30%] min-h-[84px] flex-col items-center">
-            <div className="h-[11%] w-[44%] rounded-t-[3px] bg-gradient-to-r from-[#2A2532] via-[#4A4358] to-[#211D29] shadow-sm" />
-            <div className="relative h-[89%] w-full overflow-hidden rounded-[38%_38%_16%_16%/14%_14%_8%_8%] bg-gradient-to-br from-[#E3DAEE] via-[#A999BE] to-[#4B3F5D] shadow-[0_20px_40px_-12px_rgba(34,24,52,0.65)]">
-              <div className="absolute left-[12%] top-[6%] h-[80%] w-[16%] rounded-full bg-white/35 blur-[4px]" />
-              <div className="absolute inset-x-[18%] top-[38%] rounded-[2px] border border-white/40 bg-[#F3EDE3]/90 py-[9%] text-center">
-                <p className="font-display pv-3xs tracking-[0.3em] text-[#2A2532]">AURUM</p>
-                <p className="pv-3xs mt-[6%] tracking-[0.14em] text-black/45">ORPHEUS · 07</p>
-              </div>
-              <div className="absolute bottom-[9%] left-1/2 h-[4px] w-[36%] -translate-x-1/2 rounded-full bg-white/25" />
+              <span className="text-[1.2cqw] font-semibold tracking-[-0.03em] text-pearl">PassForge</span>
+              <span className="rounded-full border border-pearl/[0.1] px-[0.8cqw] py-[0.2cqw] font-mono text-[0.55cqw] text-pearl/35">
+                v2.3
+              </span>
             </div>
-          </div>
-
-          <span className="absolute right-[8%] top-[8%] rounded-full border border-black/10 bg-white/40 px-2 py-1 pv-3xs uppercase tracking-[0.16em] text-black/45 backdrop-blur-sm">
-            Bestseller
-          </span>
-          <span className="absolute bottom-[8%] left-[8%] pv-3xs uppercase tracking-[0.18em] text-black/30">
-            Orpheus — 50ml
-          </span>
-          <div className="absolute bottom-[8%] right-[8%] flex items-center gap-1 pv-3xs text-black/35">
-            <span className="h-2 w-2 rounded-full bg-[#6D5B97]" />
-            <span className="h-2 w-2 rounded-full bg-[#D8C9A9]" />
-            <span className="h-2 w-2 rounded-full bg-[#C8CEDB]" />
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 grid grid-cols-4 gap-[1%] border-t border-black/[0.07] px-[4%] py-[2%]">
-        {[
-          { name: 'Orpheus', tone: 'from-[#B9A9D4] to-[#5B4B78]' },
-          { name: 'Velour', tone: 'from-[#D8C6AA] to-[#83694C]' },
-          { name: 'Iris No. 3', tone: 'from-[#BFC8DB] to-[#6A7691]' },
-          { name: 'Discover all', tone: 'from-[#EDE7DE] to-[#D7CDBF]' },
-        ].map((item) => (
-          <div key={item.name} className="flex items-center gap-[7%]">
-            <span className={cn('block h-5 w-4 rounded-[2px] bg-gradient-to-br', item.tone)} />
-            <span className="pv-3xs uppercase tracking-[0.1em] text-black/40">{item.name}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function PulsePreview() {
-  return (
-    <div className="relative flex h-full w-full bg-[#080A11] text-white">
-      <div className="pointer-events-none absolute -left-[10%] top-[20%] h-[60%] w-[40%] rounded-full bg-[#7C4DFF]/10 blur-[50px]" />
-
-      {/* Sidebar */}
-      <div className="relative z-10 flex h-full w-[17%] shrink-0 flex-col border-r border-white/[0.055] bg-[#0A0C14] p-[2.8%]">
-        <div className="flex items-center gap-[5%]">
-          <span className="relative flex aspect-square w-[24%] items-center justify-center rounded-full border border-[#A78BFA]/40">
-            <span className="aspect-square w-[38%] rounded-full bg-[#A78BFA]" />
-          </span>
-          <span className="pv-xs font-medium tracking-[0.14em] text-white/80">PULSE</span>
-        </div>
-
-        <div className="mt-[16%] flex items-center gap-[6%] rounded-md border border-white/[0.06] bg-white/[0.03] p-[6%]">
-          <span className="flex aspect-square w-[22%] items-center justify-center rounded bg-gradient-to-br from-[#8B5CF6] to-[#5B8CFF] pv-3xs font-medium">
-            A
-          </span>
-          <div className="min-w-0">
-            <p className="pv-3xs truncate text-white/55">Acme Studio</p>
-            <p className="pv-3xs text-white/20">12 members</p>
-          </div>
-        </div>
-
-        <div className="mt-[12%] flex flex-col gap-[4%]">
-          {[
-            { label: 'Home', active: false },
-            { label: 'My tasks', active: false },
-            { label: 'Projects', active: true },
-            { label: 'Inbox', active: false },
-            { label: 'Docs', active: false },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className={cn(
-                'flex items-center gap-[7%] rounded px-[8%] py-[4%]',
-                item.active ? 'bg-[#7C5CFF]/15 text-[#C4B5FD]' : 'text-white/25',
-              )}
-            >
-              <span className={cn('aspect-square w-[11%] rounded-full border', item.active ? 'border-[#A78BFA] bg-[#A78BFA]/30' : 'border-white/20')} />
-              <span className="pv-3xs">{item.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-auto">
-          <p className="pv-3xs mb-[6%] uppercase tracking-[0.14em] text-white/15">Spaces</p>
-          {[
-            { name: 'Website launch', color: '#5B8CFF' },
-            { name: 'Mobile app', color: '#A78BFA' },
-            { name: 'Brand refresh', color: '#34D399' },
-          ].map((space) => (
-            <div key={space.name} className="mb-[5%] flex items-center gap-[7%]">
-              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: space.color }} />
-              <span className="pv-3xs text-white/30">{space.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Main board */}
-      <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
-        <div className="flex items-center justify-between border-b border-white/[0.055] px-[3.2%] py-[2%]">
-          <div className="flex items-center gap-[1.5%]">
-            <span className="pv-sm font-medium text-white/80">Website launch</span>
-            <span className="rounded border border-white/[0.07] px-1.5 py-[2px] pv-3xs uppercase tracking-[0.1em] text-white/25">
-              Sprint 04
+            <span className="rounded-full border border-pearl/[0.1] px-[1.2cqw] py-[0.45cqw] font-mono text-[0.55cqw] uppercase tracking-[0.1em] text-pearl/45">
+              Download tool
             </span>
           </div>
-          <div className="flex items-center gap-[4px]">
-            <div className="flex -space-x-1.5">
-              {['from-[#8B5CF6] to-[#4C1D95]', 'from-[#5B8CFF] to-[#1E3A8A]', 'from-[#34D399] to-[#065F46]'].map((gradient) => (
-                <span
-                  key={gradient}
-                  className={cn('h-4 w-4 rounded-full border border-[#080A11] bg-gradient-to-br', gradient)}
-                />
-              ))}
-            </div>
-            <span className="ml-1 flex items-center gap-1 rounded bg-[#7C5CFF] px-2 py-1 pv-3xs font-medium text-white">
-              <Plus className="h-1.5 w-1.5" strokeWidth={3} />
-              Share
-            </span>
-            <span className="flex h-4 w-4 items-center justify-center rounded border border-white/10 text-white/30">
-              <Command className="h-1.5 w-1.5" strokeWidth={1.5} />
-            </span>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-[1.5%] border-b border-white/[0.045] px-[3.2%] py-[1.5%]">
-          {['Board', 'List', 'Timeline', 'Calendar'].map((tab, index) => (
-            <span
-              key={tab}
-              className={cn(
-                'pv-3xs px-1.5 py-1',
-                index === 0 ? 'rounded bg-white/[0.06] text-white/70' : 'text-white/20',
-              )}
-            >
-              {tab}
-            </span>
-          ))}
-          <span className="ml-auto flex items-center gap-1 pv-3xs text-white/20">
-            <Search className="h-2 w-2" strokeWidth={1.5} /> Filter
-          </span>
-        </div>
-
-        <div className="relative grid min-h-0 flex-1 grid-cols-3 gap-[2%] p-[2.4%]">
-          {[
-            {
-              title: 'Backlog',
-              count: 4,
-              dot: '#64748B',
-              cards: [
-                { tag: 'Research', color: '#94A3B8', title: 'Audit current onboarding drop-off', progress: 20, avatars: ['from-[#5B8CFF] to-[#1E3A8A]'] },
-                { tag: 'Content', color: '#A78BFA', title: 'Draft launch narrative & messaging', progress: 0, avatars: ['from-[#A78BFA] to-[#4C1D95]'] },
-              ],
-            },
-            {
-              title: 'In progress',
-              count: 3,
-              dot: '#5B8CFF',
-              cards: [
-                { tag: 'Design', color: '#5B8CFF', title: 'Homepage hero — final polish', progress: 68, avatars: ['from-[#5B8CFF] to-[#1E3A8A]', 'from-[#A78BFA] to-[#4C1D95]'] },
-                { tag: 'Engineering', color: '#34D399', title: 'Wire up analytics events', progress: 45, avatars: ['from-[#34D399] to-[#065F46]'] },
-              ],
-            },
-            {
-              title: 'Review',
-              count: 2,
-              dot: '#A78BFA',
-              cards: [
-                { tag: 'Engineering', color: '#F59E0B', title: 'Ship responsive QA fixes', progress: 92, avatars: ['from-[#F59E0B] to-[#78350F]'] },
-              ],
-            },
-          ].map((column) => (
-            <div key={column.title} className="flex min-w-0 flex-col rounded-lg border border-white/[0.05] bg-white/[0.018] p-[4%]">
-              <div className="mb-[5%] flex items-center gap-[4%]">
-                <span className="h-[4px] w-[4px] rounded-full" style={{ backgroundColor: column.dot }} />
-                <span className="pv-3xs uppercase tracking-[0.12em] text-white/45">{column.title}</span>
-                <span className="pv-3xs rounded bg-white/[0.05] px-1 text-white/25">{column.count}</span>
-                <Plus className="ml-auto h-2 w-2 text-white/20" strokeWidth={1.5} />
+          <div className="mt-[1.5cqw] flex min-h-0 flex-1 gap-[2cqw]">
+            <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex items-end justify-between gap-[1.5cqw]">
+                <div>
+                  <p className="font-mono text-[0.55cqw] uppercase tracking-[0.18em] text-electric-soft/55">
+                    Password &amp; passphrase generator
+                  </p>
+                  <p className="mt-[0.55cqw] font-display text-[2.55cqw] font-medium leading-[0.95] tracking-[-0.04em] text-pearl">
+                    Generate something <span className="font-serif italic text-gradient">unbreakable.</span>
+                  </p>
+                </div>
+                <span className="flex shrink-0 items-center gap-[0.4cqw] rounded-full border border-electric/20 bg-electric/[0.06] px-[1cqw] py-[0.4cqw] font-mono text-[0.5cqw] uppercase tracking-[0.1em] text-electric-soft/70">
+                  <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric" /> Local only
+                </span>
               </div>
 
-              <div className="space-y-[4%]">
-                {column.cards.map((card) => (
-                  <div
-                    key={card.title}
-                    className="rounded-md border border-white/[0.06] bg-[#0D1019] p-[6%] shadow-sm"
-                  >
-                    <span
-                      className="inline-block rounded px-1 py-[2px] pv-3xs font-medium uppercase tracking-[0.08em]"
-                      style={{ color: card.color, backgroundColor: `${card.color}14` }}
-                    >
-                      {card.tag}
+              <div className="mt-[1.1cqw] rounded-[1.2cqw] border border-pearl/[0.1] bg-[#0B0E14]/95 p-[1.3cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
+                <div className="flex items-center gap-[0.45cqw] rounded-full border border-pearl/[0.08] bg-pearl/[0.03] p-[0.3cqw] text-[0.62cqw]">
+                  <span className="rounded-full bg-pearl px-[1.2cqw] py-[0.35cqw] font-medium text-ink">Password</span>
+                  <span className="px-[1cqw] py-[0.35cqw] text-pearl/40">Passphrase</span>
+                  <span className="ml-auto flex items-center gap-[0.4cqw] px-[0.7cqw] font-mono text-[0.5cqw] uppercase tracking-[0.1em] text-pearl/25">
+                    <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric" /> Generated locally
+                  </span>
+                </div>
+
+                <div className="mt-[0.9cqw] flex items-center justify-between gap-[1cqw] rounded-[0.8cqw] border border-electric/15 bg-electric/[0.04] px-[1.2cqw] py-[0.85cqw]">
+                  <span className="truncate font-mono text-[1.35cqw] tracking-[0.02em] text-electric-soft">
+                    vK9#mQ2!pL7@xR4$wT8&amp;nB3
+                  </span>
+                  <span className="flex shrink-0 items-center gap-[0.45cqw]">
+                    <span className="flex h-[1.6cqw] w-[1.6cqw] items-center justify-center rounded-[0.4cqw] border border-pearl/[0.1] text-pearl/50">
+                      <svg viewBox="0 0 24 24" fill="none" className="h-[0.85cqw] w-[0.85cqw]" aria-hidden="true">
+                        <path
+                          d="M8 8h11v11H8zM5 16V5h11"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </span>
-                    <p className="mt-[5%] pv-xs leading-[1.35] text-white/65">{card.title}</p>
-                    <div className="mt-[7%] h-[2px] w-full rounded-full bg-white/[0.06]">
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${card.progress || 8}%`, backgroundColor: card.color, opacity: 0.7 }}
-                      />
+                    <span className="flex h-[1.6cqw] w-[1.6cqw] items-center justify-center rounded-[0.4cqw] border border-pearl/[0.1] text-pearl/50">
+                      <svg viewBox="0 0 24 24" fill="none" className="h-[0.85cqw] w-[0.85cqw]" aria-hidden="true">
+                        <path
+                          d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+
+                <div className="mt-[0.9cqw] grid grid-cols-2 gap-[1.1cqw]">
+                  <div>
+                    <div className="flex items-center justify-between font-mono text-[0.5cqw] uppercase tracking-[0.1em] text-pearl/30">
+                      <span>Length</span>
+                      <span className="text-pearl/70">24</span>
                     </div>
-                    <div className="mt-[5%] flex items-center justify-between">
-                      <div className="flex -space-x-1">
-                        {card.avatars.map((avatar) => (
-                          <span
-                            key={avatar}
-                            className={cn('h-3.5 w-3.5 rounded-full border border-[#0D1019] bg-gradient-to-br', avatar)}
-                          />
-                        ))}
-                      </div>
-                      <span className="pv-3xs text-white/20">{card.progress}%</span>
+                    <div className="relative mt-[0.65cqw] h-[0.4cqw] rounded-full bg-pearl/[0.08]">
+                      <span className="absolute inset-y-0 left-0 w-[62%] rounded-full bg-electric" />
+                      <span className="absolute left-[62%] top-1/2 h-[0.95cqw] w-[0.95cqw] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-ink bg-electric shadow-[0_0_1cqw_rgba(110,139,255,0.7)]" />
+                    </div>
+                    <div className="mt-[0.55cqw] flex items-center gap-[0.35cqw]">
+                      {[1, 2, 3, 4].map((bar) => (
+                        <span
+                          key={bar}
+                          className="h-[0.35cqw] flex-1 rounded-full bg-electric"
+                          style={{ opacity: 0.35 + bar * 0.16 }}
+                        />
+                      ))}
+                      <span className="ml-[0.35cqw] font-mono text-[0.5cqw] uppercase tracking-[0.1em] text-electric-soft/65">
+                        Strong
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap content-start gap-[0.35cqw]">
+                    {['A-Z', 'a-z', '0-9', '!@#', 'No ambiguous'].map((option, index) => (
+                      <span
+                        key={option}
+                        className={cn(
+                          'rounded-full border px-[0.7cqw] py-[0.3cqw] font-mono text-[0.45cqw] uppercase tracking-[0.06em]',
+                          index < 4
+                            ? 'border-electric/20 bg-electric/[0.06] text-electric-soft/70'
+                            : 'border-pearl/[0.08] text-pearl/30',
+                        )}
+                      >
+                        {option}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-[0.9cqw] flex items-center justify-between gap-[1cqw] border-t border-pearl/[0.07] pt-[0.8cqw]">
+                  <span className="font-mono text-[0.5cqw] uppercase tracking-[0.12em] text-pearl/20">
+                    Batch <span className="text-pearl/45">01</span>
+                  </span>
+                  <span className="rounded-full bg-pearl px-[1.4cqw] py-[0.45cqw] text-[0.58cqw] font-medium text-ink">
+                    Generate ↗
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-[0.9cqw] flex items-center justify-between">
+                <span className="font-mono text-[0.5cqw] uppercase tracking-[0.12em] text-pearl/20">
+                  No server · no account
+                </span>
+                <span className="font-mono text-[0.5cqw] uppercase tracking-[0.12em] text-pearl/30">
+                  Download standalone HTML
+                </span>
+              </div>
+            </div>
+
+            <div className="flex w-[18.5cqw] shrink-0 flex-col rounded-[1.2cqw] border border-pearl/[0.08] bg-pearl/[0.015] p-[1.2cqw]">
+              <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-[0.8cqw]">
+                <span className="font-mono text-[0.55cqw] uppercase tracking-[0.14em] text-pearl/30">
+                  History / local
+                </span>
+                <span className="font-mono text-[0.5cqw] text-pearl/20">03</span>
+              </div>
+              <div className="mt-[0.7cqw] space-y-[0.55cqw]">
+                {[
+                  ['tR7!kL2@qW9#', '2 min ago'],
+                  ['Moon-Falcon-River-42', '11 min ago'],
+                  ['xP4$vN8&hK1!', '26 min ago'],
+                ].map(([value, time]) => (
+                  <div
+                    key={value}
+                    className="rounded-[0.65cqw] border border-pearl/[0.06] bg-[#0B0E14] px-[0.8cqw] py-[0.6cqw]"
+                  >
+                    <p className="truncate font-mono text-[0.6cqw] text-pearl/55">{value}</p>
+                    <div className="mt-[0.25cqw] flex items-center justify-between">
+                      <span className="font-mono text-[0.42cqw] uppercase tracking-[0.1em] text-pearl/20">
+                        {time}
+                      </span>
+                      <span className="font-mono text-[0.42cqw] uppercase tracking-[0.1em] text-electric-soft/45">
+                        Copy
+                      </span>
                     </div>
                   </div>
                 ))}
               </div>
+              <div className="mt-auto border-t border-pearl/[0.07] pt-[0.8cqw]">
+                <p className="font-mono text-[0.45cqw] uppercase leading-relaxed tracking-[0.1em] text-pearl/20">
+                  Saved in this browser
+                </p>
+                <div className="mt-[0.5cqw] flex items-center justify-between">
+                  <span className="font-mono text-[0.45cqw] uppercase tracking-[0.1em] text-pearl/30">
+                    Clear all
+                  </span>
+                  <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric" />
+                </div>
+              </div>
             </div>
-          ))}
-
-          {/* Realtime cursors */}
-          <div className="pointer-events-none absolute right-[8%] top-[38%] z-20 flex items-center">
-            <MousePointer2 className="h-3 w-3 rotate-[-15deg] fill-[#8B5CF6] text-[#8B5CF6]" />
-            <span className="ml-0.5 rounded-full bg-[#8B5CF6] px-1.5 py-[2px] pv-3xs font-medium text-white">
-              Kai
-            </span>
-          </div>
-          <div className="pointer-events-none absolute bottom-[16%] left-[42%] z-20 flex items-center">
-            <MousePointer2 className="h-2.5 w-2.5 rotate-[-10deg] fill-[#5B8CFF] text-[#5B8CFF]" />
-            <span className="ml-0.5 rounded-full bg-[#5B8CFF] px-1.5 py-[2px] pv-3xs font-medium text-white">
-              Mint
-            </span>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function WarpPreview() {
+  return (
+    <div className="flex h-full flex-col">
+      <BrowserBar url="warp-exe.netlify.app" tag="ARCHIVE" />
+
+      <div className="relative flex-1 overflow-hidden bg-[#06080C]">
+        <div
+          className="absolute inset-0 bg-grid-lines opacity-40"
+          style={{ backgroundSize: '3.5cqw 3.5cqw' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 70% at 18% 0%, rgba(110,139,255,0.13), transparent 65%), radial-gradient(ellipse 50% 60% at 100% 100%, rgba(110,139,255,0.08), transparent 70%)',
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 z-20 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(to bottom, rgba(242,240,232,0.6) 0px, rgba(242,240,232,0.6) 1px, transparent 1px, transparent 4px)',
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 flex h-full flex-col px-[4cqw] pb-[2.6cqw]">
+          <div className="flex items-center justify-between border-b border-pearl/[0.07] py-[1.4cqw]">
+            <div className="flex items-center gap-[0.7cqw]">
+              <span className="h-[1.2cqw] w-[1.2cqw] rotate-45 border border-electric bg-electric/20 shadow-[0_0_1.4cqw_rgba(110,139,255,0.55)]" />
+              <span className="font-mono text-[1.1cqw] font-medium tracking-[0.04em] text-pearl">Warp.exe</span>
+              <span className="ml-[0.6cqw] rounded-full border border-pearl/[0.1] px-[0.8cqw] py-[0.2cqw] font-mono text-[0.5cqw] uppercase tracking-[0.12em] text-pearl/30">
+                Archive
+              </span>
+            </div>
+            <div className="hidden items-center gap-[1.6cqw] font-mono text-[0.6cqw] uppercase tracking-[0.14em] text-pearl/30 sm:flex">
+              <span>About</span>
+              <span>Protection</span>
+              <span>Commands</span>
+              <span>Contact</span>
+            </div>
+            <span className="flex items-center gap-[0.45cqw] font-mono text-[0.55cqw] uppercase tracking-[0.1em] text-electric-soft/65">
+              <span className="h-[0.4cqw] w-[0.4cqw] rounded-full bg-electric shadow-[0_0_0.8cqw_#6E8BFF]" /> Offline
+            </span>
+          </div>
+
+          <div className="grid flex-1 grid-cols-12 items-center gap-[2.4cqw]">
+            <div className="col-span-7">
+              <p className="font-mono text-[0.6cqw] uppercase tracking-[0.2em] text-electric-soft/50">
+                Discord security system
+              </p>
+              <p className="mt-[1cqw] font-display text-[4.6cqw] font-medium leading-[0.9] tracking-[-0.05em] text-pearl">
+                Advanced
+                <br />
+                server <span className="font-serif italic text-gradient">protection.</span>
+              </p>
+              <p className="mt-[1.3cqw] max-w-[33cqw] text-[1.1cqw] leading-[1.6] text-pearl/40">
+                Anti-raid, anti-nuke, auto moderation, and real-time logs — wrapped in a terminal.
+              </p>
+
+              <div className="mt-[1.8cqw] flex items-center gap-[0.9cqw]">
+                <span className="inline-flex items-center gap-[0.6cqw] rounded-full bg-pearl px-[1.8cqw] py-[0.75cqw] text-[0.8cqw] font-medium text-ink">
+                  View protection ↗
+                </span>
+                <span className="inline-flex items-center gap-[0.6cqw] rounded-full border border-pearl/[0.14] px-[1.7cqw] py-[0.75cqw] text-[0.8cqw] text-pearl/50">
+                  Read about
+                </span>
+              </div>
+
+              <div className="mt-[1.7cqw] flex items-center gap-[1.5cqw] border-t border-pearl/[0.07] pt-[1.1cqw]">
+                {['24/7 monitoring', 'Realtime detection', 'Panic lockdown'].map((item) => (
+                  <span
+                    key={item}
+                    className="flex items-center gap-[0.45cqw] font-mono text-[0.55cqw] uppercase tracking-[0.08em] text-pearl/25"
+                  >
+                    <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric/70" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="col-span-5">
+              <div className="rounded-[1.3cqw] border border-electric/15 bg-[#0A0D14]/95 p-[1.4cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
+                <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-[0.9cqw]">
+                  <span className="font-mono text-[0.55cqw] uppercase tracking-[0.16em] text-pearl/25">
+                    Security core
+                  </span>
+                  <span className="flex items-center gap-[0.4cqw] font-mono text-[0.5cqw] uppercase tracking-[0.1em] text-electric-soft/65">
+                    <span className="h-[0.35cqw] w-[0.35cqw] rounded-full bg-electric" /> Active
+                  </span>
+                </div>
+
+                <div className="mt-[1cqw] space-y-[0.6cqw]">
+                  {[
+                    ['Threat level', 'LOW', '18%'],
+                    ['Shield', '99.9%', '92%'],
+                    ['Auto mod', 'ON', '100%'],
+                    ['Logs', 'LIVE', '76%'],
+                  ].map(([label, value, width]) => (
+                    <div key={label}>
+                      <div className="flex items-center justify-between font-mono text-[0.5cqw] uppercase tracking-[0.08em]">
+                        <span className="text-pearl/25">{label}</span>
+                        <span className="text-pearl/60">{value}</span>
+                      </div>
+                      <div className="mt-[0.3cqw] h-[0.3cqw] rounded-full bg-pearl/[0.07]">
+                        <span className="block h-full rounded-full bg-electric/70" style={{ width }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-[1.1cqw] rounded-[0.7cqw] border border-pearl/[0.07] bg-pearl/[0.02] px-[0.8cqw] py-[0.7cqw]">
+                  <p className="font-mono text-[0.5cqw] uppercase tracking-[0.12em] text-pearl/20">Latest event</p>
+                  <p className="mt-[0.4cqw] font-mono text-[0.55cqw] leading-relaxed text-pearl/35">
+                    <span className="text-electric-soft/70">[OK]</span> automod: blocked invite link
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function LandingPreview() {
+  return (
+    <div className="flex h-full flex-col">
+      <BrowserBar url="vx7q.github.io/project" />
+      <div className="relative flex flex-1 overflow-hidden">
+        <ThemeHalf tone="dark" language="EN" />
+        <div className="relative z-10 w-px bg-pearl/[0.12]" aria-hidden="true" />
+        <ThemeHalf tone="light" language="TH" />
+      </div>
+    </div>
+  )
+}
+
+function ThemeHalf({ tone, language }: { tone: 'dark' | 'light'; language: 'EN' | 'TH' }) {
+  const dark = tone === 'dark'
+  return (
+    <div
+      className={cn(
+        'relative flex flex-1 flex-col overflow-hidden px-[3.5cqw] py-[2.6cqw]',
+        dark ? 'bg-[#07080C]' : 'bg-[#EDEAE2]',
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <span
+          className={cn(
+            'text-[1.15cqw] font-semibold tracking-[-0.03em]',
+            dark ? 'text-pearl' : 'text-[#14151B]',
+          )}
+        >
+          <span className={dark ? 'text-electric' : 'text-[#3B4FC4]'}>/</span>project
+        </span>
+        <span
+          className={cn(
+            'rounded-full border px-[1.4cqw] py-[0.45cqw] font-mono text-[0.65cqw] uppercase tracking-[0.12em]',
+            dark ? 'border-pearl/[0.1] text-pearl/35' : 'border-black/[0.12] text-black/35',
+          )}
+        >
+          {language} <span className="opacity-45">/ ZH</span>
+        </span>
+      </div>
+
+      {dark && (
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          {[
+            ['18%', '22%', '0.35s'],
+            ['72%', '18%', '1.1s'],
+            ['60%', '64%', '0.7s'],
+            ['30%', '78%', '1.5s'],
+            ['84%', '48%', '0.2s'],
+          ].map(([left, top, delay], index) => (
+            <span
+              key={index}
+              className="animate-float absolute h-[0.5cqw] w-[0.5cqw] rounded-full bg-electric/60 shadow-[0_0_1cqw_rgba(110,139,255,0.8)]"
+              style={{ left, top, animationDelay: delay }}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="relative z-10 flex flex-1 flex-col justify-center">
+        <p
+          className={cn(
+            'font-mono text-[0.7cqw] uppercase tracking-[0.18em]',
+            dark ? 'text-pearl/25' : 'text-black/35',
+          )}
+        >
+          One page · two moods
+        </p>
+        <p
+          className={cn(
+            'mt-[1.2cqw] font-display text-[7.4cqw] font-medium uppercase leading-[0.82] tracking-[-0.06em]',
+            dark ? 'text-pearl' : 'text-[#12131A]',
+          )}
+        >
+          Make
+          <br />
+          it
+          <br />
+          yours<span className={dark ? 'text-electric' : 'text-[#3B4FC4]'}>.</span>
+        </p>
+        <div className="mt-[2cqw]">
+          <span
+            className={cn(
+              'inline-flex items-center gap-[0.7cqw] rounded-full px-[1.7cqw] py-[0.8cqw] text-[1.1cqw] font-medium',
+              dark ? 'bg-pearl text-ink' : 'bg-[#12131A] text-[#F5F6FA]',
+            )}
+          >
+            Explore <span>↗</span>
+          </span>
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          'relative z-10 flex items-center justify-between border-t pt-[1.2cqw] font-mono text-[0.6cqw] uppercase tracking-[0.14em]',
+          dark ? 'border-pearl/[0.08] text-pearl/20' : 'border-black/[0.1] text-black/30',
+        )}
+      >
+        <span>Theme / language</span>
+        <span className={dark ? 'text-electric-soft/60' : 'text-[#3B4FC4]'}>
+          {dark ? 'Dark' : 'Light'} mode
+        </span>
       </div>
     </div>
   )
