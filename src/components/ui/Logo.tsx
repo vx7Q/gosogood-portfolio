@@ -1,3 +1,4 @@
+import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 interface LogoProps {
@@ -7,11 +8,13 @@ interface LogoProps {
 }
 
 export function Logo({ className, markClassName, wordmarkClassName }: LogoProps) {
+  const { copy } = useI18n()
+
   return (
     <a
       href="#home"
       className={cn('group flex items-center gap-2.5', className)}
-      aria-label="_gosogood — back to top"
+      aria-label={copy.common.logoAria}
     >
       <span
         className={cn(

@@ -10,7 +10,8 @@ import {
   MessageCircle,
   Send,
 } from 'lucide-react'
-import { contactTopics, site } from '@/lib/data'
+import { site } from '@/lib/data'
+import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { useClipboard } from '@/hooks/useClipboard'
 import { useLocalTime } from '@/hooks/useLocalTime'
@@ -31,8 +32,19 @@ type FormErrors = Partial<Record<keyof FormState, string>>
 const initialForm: FormState = {
   name: '',
   email: '',
-  topic: contactTopics[0],
+  topic: '',
   message: '',
+}
+
+function EmailText({ email }: { email: string }) {
+  const at = email.indexOf('@')
+  if (at < 1) return <>{email}</>
+  return (
+    <>
+      {email.slice(0, at)}
+      <wbr />@{email.slice(at + 1)}
+    </>
+  )
 }
 
 export function Contact() {
@@ -45,25 +57,35 @@ export function Contact() {
   const { copied: discordCopied, copy: copyDiscord } = useClipboard()
   const { copied: messageCopied, copy: copyMessage } = useClipboard()
   const localTime = useLocalTime()
+  const { copy } = useI18n()
+  const { contact, common } = copy
+  const { form: formText, success, toasts } = contact
+
+  const topicLabel = useMemo(
+    () => contact.topics.find((topic) => topic.id === form.topic)?.label ?? '',
+    [contact.topics, form.topic],
+  )
 
   const composedMessage = useMemo(
     () =>
       [
-        'Hi _gosogood,',
+        formText.compose.greeting,
         '',
-        `Name: ${form.name}`,
-        `Email: ${form.email}`,
-        `Topic: ${form.topic}`,
+        `${formText.compose.name}: ${form.name}`,
+        `${formText.compose.email}: ${form.email}`,
+        `${formText.compose.topic}: ${topicLabel}`,
         '',
         form.message,
       ].join('\n'),
-    [form],
+    [form, formText.compose, topicLabel],
   )
 
   const mailtoHref = useMemo(() => {
-    const subject = `${form.topic || 'Hello'} — from ${form.name || 'your site'}`
+    const subject = `${topicLabel || formText.compose.subjectFallback} — ${
+      form.name || formText.compose.fromFallback
+    }`
     return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(composedMessage)}`
-  }, [form.topic, form.name, composedMessage])
+  }, [topicLabel, form.name, formText.compose, composedMessage])
 
   const updateField = (field: keyof FormState, value: string) => {
     setForm((current) => ({ ...current, [field]: value }))
@@ -74,12 +96,12 @@ export function Contact() {
 
   const validate = () => {
     const nextErrors: FormErrors = {}
-    if (form.name.trim().length < 2) nextErrors.name = 'Please tell me your name.'
+    if (form.name.trim().length < 2) nextErrors.name = formText.errors.name
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      nextErrors.email = 'Please enter a valid email address.'
+      nextErrors.email = formText.errors.email
     }
-    if (form.topic === contactTopics[0]) nextErrors.topic = 'Choose a topic.'
-    if (form.message.trim().length < 12) nextErrors.message = 'A little more detail, please (12+ characters).'
+    if (!form.topic) nextErrors.topic = formText.errors.topic
+    if (form.message.trim().length < 12) nextErrors.message = formText.errors.message
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
   }
@@ -126,16 +148,18 @@ export function Contact() {
         <Reveal>
           <SectionHeader
             index="06"
-            label="Contact"
-            meta="SAY HI"
+            label={contact.label}
+            meta={contact.meta}
             title={
               <>
-                Not a job offer.
+                {contact.titleLead}
                 <br />
-                <span className="font-serif italic tracking-[-0.03em] text-gradient">Maybe a conversation?</span>
+                <span className="accent-serif italic tracking-[-0.03em] text-gradient">
+                  {contact.titleAccent}
+                </span>
               </>
             }
-            description="I am not taking work right now, but I am happy to talk about projects, code, PUBG, music, or anything in between."
+            description={contact.description}
           />
         </Reveal>
 
@@ -144,28 +168,28 @@ export function Contact() {
             <Reveal delay={0.03}>
               <div className="glass hover-spotlight group relative overflow-hidden rounded-[24px] p-6 sm:p-7">
                 <div className="flex items-center justify-between">
-                  <span className="mono text-pearl/25">Email</span>
+                  <span className="mono text-pearl/25">{contact.email}</span>
                   <button
                     type="button"
                     onClick={() => copyEmail(site.email)}
                     className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-pearl/[0.08] px-2.5 text-[8px] uppercase tracking-[0.12em] text-pearl/35 transition-colors hover:border-pearl/20 hover:text-pearl"
-                    aria-label="Copy email address"
+                    aria-label={contact.copyEmailAria}
                   >
                     {emailCopied ? (
                       <Check className="h-2.5 w-2.5" strokeWidth={2} />
                     ) : (
                       <Copy className="h-2.5 w-2.5" strokeWidth={1.5} />
                     )}
-                    {emailCopied ? 'Copied' : 'Copy'}
+                    {emailCopied ? contact.copied : contact.copy}
                   </button>
                 </div>
                 <a href={`mailto:${site.email}`} className="group/mail mt-5 block">
-                  <span className="display block break-all text-[clamp(0.88rem,1.62vw,1.55rem)] leading-snug tracking-[-0.025em] text-pearl transition-colors group-hover/mail:text-electric-soft">
-                    {site.email}
+                  <span className="display block text-[clamp(0.82rem,1.45vw,1.28rem)] leading-snug tracking-[-0.025em] text-pearl transition-colors group-hover/mail:text-electric-soft">
+                    <EmailText email={site.email} />
                   </span>
                   <span className="mt-4 flex items-end justify-between gap-4">
                     <span className="max-w-[26rem] text-[10px] leading-relaxed text-pearl/30">
-                      The fastest way to reach me. I reply when I can.
+                      {contact.emailNote}
                     </span>
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-pearl/[0.1] text-pearl/35 transition-all duration-500 group-hover/mail:rotate-45 group-hover/mail:border-electric/30 group-hover/mail:text-electric">
                       <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -179,7 +203,7 @@ export function Contact() {
               <Reveal delay={0.07}>
                 <div className="glass flex h-full flex-col justify-between rounded-[20px] p-5">
                   <div className="flex items-center justify-between">
-                    <span className="mono text-pearl/25">Discord</span>
+                    <span className="mono text-pearl/25">{contact.discord}</span>
                     <MessageCircle className="h-3 w-3 text-pearl/20" strokeWidth={1.5} />
                   </div>
                   <p className="mt-5 text-[13px] text-pearl/65">{site.discord}</p>
@@ -189,7 +213,7 @@ export function Contact() {
                     className="mt-4 flex items-center gap-1.5 text-[8px] uppercase tracking-[0.12em] text-pearl/25 transition-colors hover:text-pearl/60"
                   >
                     <Copy className="h-2.5 w-2.5" strokeWidth={1.5} />
-                    {discordCopied ? 'Copied' : 'Copy — add me'}
+                    {discordCopied ? contact.discordCopied : contact.discordCopy}
                   </button>
                 </div>
               </Reveal>
@@ -197,13 +221,13 @@ export function Contact() {
               <Reveal delay={0.11}>
                 <div className="glass flex h-full flex-col justify-between rounded-[20px] p-5">
                   <div className="flex items-center justify-between">
-                    <span className="mono text-pearl/25">Local time</span>
+                    <span className="mono text-pearl/25">{contact.localTime}</span>
                     <span className="h-1 w-1 rounded-full bg-electric" />
                   </div>
                   <p className="mt-5 font-mono text-[15px] tabular-nums tracking-[0.06em] text-pearl/75">
                     {localTime}
                   </p>
-                  <p className="mono mt-4 text-[7px] text-pearl/25">Suphan Buri · GMT+7</p>
+                  <p className="mono mt-4 text-[7px] text-pearl/25">{contact.timezone}</p>
                 </div>
               </Reveal>
             </div>
@@ -216,11 +240,11 @@ export function Contact() {
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-electric/50" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-electric" />
                     </span>
-                    <p className="text-[12px] text-electric-soft/70">{site.availability}</p>
+                    <p className="text-[12px] text-electric-soft/70">{common.availability}</p>
                   </div>
                   <span className="mono shrink-0 text-electric-soft/30">2026</span>
                 </div>
-                <p className="mt-3 max-w-sm text-[10px] leading-relaxed text-pearl/30">{site.availabilityNote}</p>
+                <p className="mt-3 max-w-sm text-[10px] leading-relaxed text-pearl/30">{common.availabilityNote}</p>
               </div>
             </Reveal>
 
@@ -228,7 +252,7 @@ export function Contact() {
               <div className="glass flex flex-col gap-4 rounded-[20px] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-2.5">
                   <MapPin className="h-3.5 w-3.5 text-pearl/25" strokeWidth={1.5} />
-                  <span className="text-[10px] text-pearl/40">Suphan Buri, Thailand</span>
+                  <span className="text-[10px] text-pearl/40">{contact.location}</span>
                 </div>
                 <SocialLinks showLabels className="flex-wrap" iconClassName="text-[8px]" />
               </div>
@@ -246,13 +270,13 @@ export function Contact() {
                 <div>
                   <p className="mono flex items-center gap-2 text-pearl/25">
                     <Mail className="h-3 w-3" strokeWidth={1.5} />
-                    Say hello
+                    {formText.hello}
                   </p>
                   <h3 className="display mt-2 text-2xl tracking-[-0.03em] text-pearl">
-                    Tell me what&apos;s on your mind.
+                    {formText.heading}
                   </h3>
                 </div>
-                <span className="mono hidden text-pearl/15 sm:block">Form / 01</span>
+                <span className="mono hidden text-pearl/15 sm:block">{formText.formIndex}</span>
               </div>
 
               <div className="relative mt-7 h-px w-full bg-pearl/[0.07]" />
@@ -275,17 +299,16 @@ export function Contact() {
                     >
                       <Check className="h-5 w-5" strokeWidth={2} />
                     </motion.span>
-                    <h4 className="display mt-6 text-2xl tracking-[-0.03em] text-pearl">Message ready.</h4>
+                    <h4 className="display mt-6 text-2xl tracking-[-0.03em] text-pearl">{success.title}</h4>
                     <p className="mt-3 max-w-sm text-[0.82rem] leading-relaxed text-mist">
-                      Your email app should open with everything filled in. If it didn&apos;t, copy the message and
-                      send it directly to{' '}
+                      {success.descriptionBefore}{' '}
                       <a
                         href={`mailto:${site.email}`}
-                        className="break-all text-pearl/70 underline underline-offset-2"
+                        className="break-words text-pearl/70 underline underline-offset-2"
                       >
-                        {site.email}
+                        <EmailText email={site.email} />
                       </a>
-                      .
+                      {success.descriptionAfter}
                     </p>
 
                     <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
@@ -299,28 +322,28 @@ export function Contact() {
                         ) : (
                           <Copy className="h-3 w-3" strokeWidth={1.5} />
                         )}
-                        {messageCopied ? 'Copied' : 'Copy message'}
+                        {messageCopied ? success.copied : success.copyMessage}
                       </button>
                       <a
                         href={mailtoHref}
                         className="flex h-10 items-center gap-2 rounded-full bg-pearl px-4 text-[10px] font-medium text-ink transition-colors hover:bg-white"
                       >
                         <Send className="h-3 w-3" strokeWidth={1.75} />
-                        Open email app
+                        {success.openEmail}
                       </a>
                     </div>
 
                     <div className="mt-6 max-w-md rounded-xl border border-pearl/[0.07] bg-pearl/[0.015] px-5 py-4 text-left">
-                      <p className="mono text-[7px] text-pearl/20">Quick summary</p>
+                      <p className="mono text-[7px] text-pearl/20">{success.summary}</p>
                       <div className="mt-2.5 grid gap-1.5 text-[10px] text-pearl/40 sm:grid-cols-2">
                         <span>
-                          <span className="text-pearl/20">From:</span> {form.name}
+                          <span className="text-pearl/20">{success.from}:</span> {form.name}
                         </span>
                         <span>
-                          <span className="text-pearl/20">Topic:</span> {form.topic}
+                          <span className="text-pearl/20">{success.topic}:</span> {topicLabel}
                         </span>
                         <span className="break-all sm:col-span-2">
-                          <span className="text-pearl/20">Email:</span> {form.email}
+                          <span className="text-pearl/20">{success.email}:</span> {form.email}
                         </span>
                       </div>
                     </div>
@@ -330,7 +353,7 @@ export function Contact() {
                       onClick={resetForm}
                       className="mt-6 text-[9px] uppercase tracking-[0.14em] text-pearl/30 underline-offset-4 transition-colors hover:text-pearl/60 hover:underline"
                     >
-                      Write another message
+                      {success.again}
                     </button>
                   </motion.div>
                 ) : (
@@ -347,7 +370,7 @@ export function Contact() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label htmlFor="contact-name" className="mono mb-2 block text-pearl/30">
-                          Your name <span className="text-electric/70">*</span>
+                          {formText.name} <span className="text-electric/70">*</span>
                         </label>
                         <input
                           id="contact-name"
@@ -356,7 +379,7 @@ export function Contact() {
                           autoComplete="name"
                           value={form.name}
                           onChange={(event) => updateField('name', event.target.value)}
-                          placeholder="Your name"
+                          placeholder={formText.namePlaceholder}
                           className={cn('field', errors.name && 'field-error')}
                           aria-invalid={Boolean(errors.name)}
                           aria-describedby={errors.name ? 'contact-name-error' : undefined}
@@ -370,7 +393,7 @@ export function Contact() {
 
                       <div>
                         <label htmlFor="contact-email" className="mono mb-2 block text-pearl/30">
-                          Email <span className="text-electric/70">*</span>
+                          {formText.email} <span className="text-electric/70">*</span>
                         </label>
                         <input
                           id="contact-email"
@@ -379,7 +402,7 @@ export function Contact() {
                           autoComplete="email"
                           value={form.email}
                           onChange={(event) => updateField('email', event.target.value)}
-                          placeholder="you@example.com"
+                          placeholder={formText.emailPlaceholder}
                           className={cn('field', errors.email && 'field-error')}
                           aria-invalid={Boolean(errors.email)}
                           aria-describedby={errors.email ? 'contact-email-error' : undefined}
@@ -393,7 +416,7 @@ export function Contact() {
 
                       <div className="sm:col-span-2">
                         <label htmlFor="contact-topic" className="mono mb-2 block text-pearl/30">
-                          What is this about? <span className="text-electric/70">*</span>
+                          {formText.topic} <span className="text-electric/70">*</span>
                         </label>
                         <div className="relative">
                           <select
@@ -403,15 +426,18 @@ export function Contact() {
                             onChange={(event) => updateField('topic', event.target.value)}
                             className={cn(
                               'field appearance-none pr-9',
-                              form.topic === contactTopics[0] ? 'text-pearl/40' : 'text-pearl',
+                              form.topic === '' ? 'text-pearl/40' : 'text-pearl',
                               errors.topic && 'field-error',
                             )}
                             aria-invalid={Boolean(errors.topic)}
                             aria-describedby={errors.topic ? 'contact-topic-error' : undefined}
                           >
-                            {contactTopics.map((option) => (
-                              <option key={option} value={option} className="bg-panel text-pearl">
-                                {option}
+                            <option value="" className="bg-panel text-pearl/40">
+                              {formText.topicPlaceholder}
+                            </option>
+                            {contact.topics.map((option) => (
+                              <option key={option.id} value={option.id} className="bg-panel text-pearl">
+                                {option.label}
                               </option>
                             ))}
                           </select>
@@ -431,7 +457,7 @@ export function Contact() {
                     <div className="mt-4">
                       <div className="mb-2 flex items-center justify-between">
                         <label htmlFor="contact-message" className="mono text-pearl/30">
-                          Your message <span className="text-electric/70">*</span>
+                          {formText.message} <span className="text-electric/70">*</span>
                         </label>
                         <span
                           className={cn(
@@ -449,7 +475,7 @@ export function Contact() {
                         maxLength={800}
                         value={form.message}
                         onChange={(event) => updateField('message', event.target.value)}
-                        placeholder="What are you playing, listening to, or building?"
+                        placeholder={formText.messagePlaceholder}
                         className={cn('field min-h-[130px] resize-none', errors.message && 'field-error')}
                         aria-invalid={Boolean(errors.message)}
                         aria-describedby={errors.message ? 'contact-message-error' : undefined}
@@ -472,14 +498,14 @@ export function Contact() {
                           disabled={sending}
                           className="group relative flex h-12 w-full items-center justify-between rounded-full bg-pearl py-1.5 pl-6 pr-1.5 text-[12px] font-medium text-ink transition-colors hover:bg-white disabled:cursor-wait disabled:opacity-80"
                         >
-                          {sending ? 'Preparing your message…' : 'Send message'}
+                          {sending ? formText.sending : formText.send}
                           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-pearl transition-transform duration-500 group-hover:rotate-45">
                             <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
                           </span>
                         </button>
                       </div>
                       <p className="mono mt-3 text-center text-[6.5px] leading-relaxed text-pearl/15">
-                        Opens your email app — no trackers, no newsletters
+                        {formText.footnote}
                       </p>
                     </div>
                   </motion.form>
@@ -490,9 +516,9 @@ export function Contact() {
         </div>
       </div>
 
-      <Toast show={emailCopied} message="Email copied to clipboard" />
-      <Toast show={discordCopied} message="Discord handle copied" />
-      <Toast show={messageCopied} message="Message copied to clipboard" />
+      <Toast show={emailCopied} message={toasts.email} />
+      <Toast show={discordCopied} message={toasts.discord} />
+      <Toast show={messageCopied} message={toasts.message} />
     </section>
   )
 }

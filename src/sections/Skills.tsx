@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Atom, Braces, Code2, Plus, Rocket, Sparkles } from 'lucide-react'
-import { honestNotes, learningLoop, skills } from '@/lib/data'
+import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
 import { SectionHeader } from '@/components/ui/SectionHeader'
@@ -17,6 +17,8 @@ const skillIcons: Record<string, ReactNode> = {
 
 export function Skills() {
   const [open, setOpen] = useState(0)
+  const { copy, skills } = useI18n()
+  const { skills: skillsCopy, common } = copy
 
   return (
     <section id="skills" className="section-space section-anchor relative">
@@ -24,16 +26,18 @@ export function Skills() {
         <Reveal>
           <SectionHeader
             index="05"
-            label="Skills"
-            meta="HONESTLY LABELLED"
+            label={skillsCopy.label}
+            meta={skillsCopy.meta}
             title={
               <>
-                A small skill set,
+                {skillsCopy.titleLead}
                 <br />
-                <span className="font-serif italic tracking-[-0.03em] text-gradient">named honestly.</span>
+                <span className="accent-serif italic tracking-[-0.03em] text-gradient">
+                  {skillsCopy.titleAccent}
+                </span>
               </>
             }
-            description="No ratings out of ten. Five areas I have used in real builds, with the parts I am still learning left visible."
+            description={skillsCopy.description}
           />
         </Reveal>
 
@@ -103,7 +107,7 @@ export function Skills() {
                                 {item.description}
                               </p>
                               <div className="sm:col-span-5">
-                                <p className="mono text-pearl/20">Tools</p>
+                                <p className="mono text-pearl/20">{skillsCopy.toolsLabel}</p>
                                 <div className="mt-3 flex flex-wrap gap-1.5">
                                   {item.tools.map((tool) => (
                                     <span
@@ -114,7 +118,7 @@ export function Skills() {
                                     </span>
                                   ))}
                                 </div>
-                                <p className="mono mt-4 text-pearl/15">Used in</p>
+                                <p className="mono mt-4 text-pearl/15">{skillsCopy.usedInLabel}</p>
                                 <p className="mt-1.5 text-[9px] leading-relaxed text-pearl/35">
                                   {item.usedIn.join(' · ')}
                                 </p>
@@ -131,11 +135,11 @@ export function Skills() {
 
             <Reveal delay={0.1}>
               <div className="mt-8 grid gap-4 border-t border-pearl/[0.07] pt-6 sm:grid-cols-4">
-                {learningLoop.map(([number, title, note]) => (
-                  <div key={number}>
-                    <span className="font-mono text-[8px] text-electric/50">{number}</span>
-                    <p className="mt-2 text-[11px] text-pearl/55">{title}</p>
-                    <p className="mt-1 text-[9px] leading-relaxed text-pearl/25">{note}</p>
+                {skillsCopy.loop.map((item) => (
+                  <div key={item.number}>
+                    <span className="font-mono text-[8px] text-electric/50">{item.number}</span>
+                    <p className="mt-2 text-[11px] text-pearl/55">{item.title}</p>
+                    <p className="mt-1 text-[9px] leading-relaxed text-pearl/25">{item.note}</p>
                   </div>
                 ))}
               </div>
@@ -150,26 +154,25 @@ export function Skills() {
               />
               <div className="relative">
                 <div className="flex items-center justify-between">
-                  <span className="mono text-pearl/25">Current level</span>
+                  <span className="mono text-pearl/25">{skillsCopy.currentLevel}</span>
                   <span className="flex items-center gap-1.5">
                     <span className="h-1 w-1 rounded-full bg-electric" />
                     <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-electric-soft/55">
-                      Learning
+                      {skillsCopy.learning}
                     </span>
                   </span>
                 </div>
 
                 <h3 className="display mt-8 text-[clamp(2rem,3.2vw,2.8rem)] leading-[0.98] tracking-[-0.04em] text-pearl">
-                  Student first.{' '}
-                  <span className="font-serif italic text-gradient">Developer later.</span>
+                  {skillsCopy.cardTitleLead}{' '}
+                  <span className="accent-serif italic text-gradient">{skillsCopy.cardTitleAccent}</span>
                 </h3>
                 <p className="mt-4 text-[0.86rem] leading-[1.75] text-mist">
-                  I am not a professional yet. These are things I have actually built with, and the list keeps
-                  changing as I learn.
+                  {skillsCopy.cardDescription}
                 </p>
 
                 <ul className="mt-6 space-y-2.5 border-t border-pearl/[0.07] pt-5">
-                  {honestNotes.map((item) => (
+                  {skillsCopy.notes.map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-[10px] text-pearl/40">
                       <span className="h-1 w-1 rounded-full bg-electric/70" />
                       {item}
@@ -179,8 +182,8 @@ export function Skills() {
 
                 <div className="mt-7 flex items-center justify-between gap-3 rounded-2xl border border-pearl/[0.08] bg-pearl/[0.02] px-4 py-3.5">
                   <div>
-                    <p className="mono text-pearl/20">Status</p>
-                    <p className="mt-1 text-[10px] text-pearl/55">Studying — not taking work</p>
+                    <p className="mono text-pearl/20">{skillsCopy.statusLabel}</p>
+                    <p className="mt-1 text-[10px] text-pearl/55">{common.status}</p>
                   </div>
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-electric/50" />

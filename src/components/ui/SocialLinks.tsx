@@ -1,5 +1,6 @@
 import { Github, Instagram, Mail, MessageCircle } from 'lucide-react'
 import { socials } from '@/lib/data'
+import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 interface SocialLinksProps {
@@ -30,18 +31,21 @@ const icons = {
 } as const
 
 export function SocialLinks({ className, iconClassName, showLabels = false }: SocialLinksProps) {
+  const { copy } = useI18n()
+
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
       {socials.map((social) => {
         const Icon = icons[social.icon]
         const isExternal = ['github', 'instagram', 'x'].includes(social.icon)
+        const label = social.icon === 'mail' ? copy.common.email : social.label
         return (
           <a
             key={social.label}
             href={social.href}
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noreferrer' : undefined}
-            aria-label={social.label}
+            aria-label={label}
             className={cn(
               'group inline-flex items-center gap-2 text-pearl/45 transition-colors duration-300 hover:text-pearl',
               showLabels
@@ -51,7 +55,7 @@ export function SocialLinks({ className, iconClassName, showLabels = false }: So
             )}
           >
             <Icon className={cn(showLabels ? 'h-3 w-3' : 'h-4 w-4')} strokeWidth={1.6} />
-            {showLabels && <span>{social.label}</span>}
+            {showLabels && <span>{label}</span>}
           </a>
         )
       })}

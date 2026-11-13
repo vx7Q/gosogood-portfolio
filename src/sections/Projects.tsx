@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowUpRight, Github, Plus } from 'lucide-react'
-import { projects, type Project } from '@/lib/data'
+import { useI18n } from '@/lib/i18n'
+import type { LocalizedProject } from '@/lib/localized'
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
 import { SectionHeader } from '@/components/ui/SectionHeader'
@@ -9,7 +10,10 @@ import { ProjectPreview } from '@/components/projects/ProjectPreview'
 import { ProjectModal } from '@/components/projects/ProjectModal'
 
 export function Projects() {
-  const [selected, setSelected] = useState<Project | null>(null)
+  const [selected, setSelected] = useState<LocalizedProject | null>(null)
+  const { copy, projects } = useI18n()
+  const { projects: projectsCopy } = copy
+  const { labels } = projectsCopy
 
   return (
     <section id="work" className="section-space section-anchor relative">
@@ -17,23 +21,25 @@ export function Projects() {
         <Reveal>
           <SectionHeader
             index="03"
-            label="Selected work"
-            meta="04 BUILDS / 2026"
+            label={projectsCopy.label}
+            meta={projectsCopy.meta}
             title={
               <>
-                Four public builds.
+                {projectsCopy.titleLead}
                 <br />
-                <span className="font-serif italic tracking-[-0.03em] text-gradient">One is retired.</span>
+                <span className="accent-serif italic tracking-[-0.03em] text-gradient">
+                  {projectsCopy.titleAccent}
+                </span>
               </>
             }
-            description="Small tools, a bot page I stopped updating, and this site. Three are still live; one is kept online as an archive."
+            description={projectsCopy.description}
           />
         </Reveal>
 
         <div className="mt-14 space-y-5">
           {projects.map((project, index) => {
             const reversed = index % 2 === 1
-            const isRetired = project.status === 'Retired'
+            const isRetired = project.retired
             return (
               <Reveal key={project.id}>
                 <SpotlightCard className="glass overflow-hidden rounded-[30px] p-2 transition-colors duration-500 hover:border-pearl/[0.14] sm:p-3">
@@ -46,12 +52,12 @@ export function Projects() {
                         'group/preview relative block rounded-[24px] p-2 sm:p-3 lg:col-span-7',
                         reversed && 'lg:order-2',
                       )}
-                      aria-label={`Open ${isRetired ? 'archive' : 'live site'} for ${project.title}`}
+                      aria-label={`${isRetired ? labels.ariaArchive : labels.ariaLive} ${project.title}`}
                     >
                       <ProjectPreview id={project.id} />
                       <span className="pointer-events-none absolute inset-2 flex items-end justify-end rounded-[24px] bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover/preview:opacity-100 sm:inset-3">
                         <span className="m-3 flex items-center gap-1.5 rounded-full bg-pearl px-3.5 py-2 text-[9px] font-medium text-ink">
-                          {isRetired ? 'Visit archive' : 'Open live site'}
+                          {isRetired ? labels.visitArchive : labels.openLive}
                           <ArrowUpRight className="h-3 w-3" strokeWidth={1.8} />
                         </span>
                       </span>
@@ -72,7 +78,9 @@ export function Projects() {
 
                       <div>
                         <div className="flex items-center justify-between gap-4 border-b border-pearl/[0.07] pb-4">
-                          <span className="mono text-pearl/25">Project / {project.index}</span>
+                          <span className="mono text-pearl/25">
+                            {labels.project} / {project.index}
+                          </span>
                           <span
                             className={cn(
                               'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[7px] uppercase tracking-[0.1em]',
@@ -131,7 +139,7 @@ export function Projects() {
                           onClick={() => setSelected(project)}
                           className="group/case inline-flex h-10 items-center gap-3 rounded-full bg-pearl pl-4 pr-1.5 text-[10px] font-medium text-ink transition-colors hover:bg-white"
                         >
-                          Open case study
+                          {labels.openCase}
                           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-pearl transition-transform duration-500 group-hover/case:rotate-45">
                             <Plus className="h-3.5 w-3.5" strokeWidth={1.8} />
                           </span>
@@ -143,7 +151,7 @@ export function Projects() {
                           rel="noreferrer"
                           className="group/link inline-flex items-center gap-1.5 text-[9px] uppercase tracking-[0.12em] text-pearl/35 transition-colors hover:text-pearl"
                         >
-                          {isRetired ? 'Archive' : 'Live site'}
+                          {isRetired ? labels.archive : labels.liveSite}
                           <ArrowUpRight className="h-3 w-3 transition-transform duration-300 group-hover/link:rotate-45" />
                         </a>
                         {project.repo && (
@@ -168,16 +176,14 @@ export function Projects() {
 
         <Reveal delay={0.08}>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-pearl/[0.07] bg-pearl/[0.015] px-5 py-4">
-            <p className="text-[10px] leading-relaxed text-pearl/30">
-              Two of these have public source on GitHub. The other two stayed static and small.
-            </p>
+            <p className="text-[10px] leading-relaxed text-pearl/30">{labels.footerNote}</p>
             <a
               href="https://github.com/vx7Q"
               target="_blank"
               rel="noreferrer"
               className="group inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-pearl/45 transition-colors hover:text-pearl"
             >
-              Browse GitHub
+              {labels.browseGithub}
               <ArrowUpRight className="h-3 w-3 transition-transform duration-300 group-hover:rotate-45" />
             </a>
           </div>

@@ -1,6 +1,8 @@
+import { Fragment } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, Boxes, Code2, Gamepad2, MapPin, Music2 } from 'lucide-react'
-import { heroFacts, marqueeWords, site } from '@/lib/data'
+import { marqueeWords, site } from '@/lib/data'
+import { useI18n } from '@/lib/i18n'
 import { scrollToId } from '@/lib/scroll'
 import { useLocalTime } from '@/hooks/useLocalTime'
 import { MagneticButton } from '@/components/ui/MagneticButton'
@@ -9,9 +11,25 @@ import { SocialLinks } from '@/components/ui/SocialLinks'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+function IntroText({ text }: { text: string }) {
+  const parts = text.split('PUBG')
+  return (
+    <>
+      {parts.map((part, index) => (
+        <Fragment key={`${part}-${index}`}>
+          {part}
+          {index < parts.length - 1 && <span className="text-pearl">PUBG</span>}
+        </Fragment>
+      ))}
+    </>
+  )
+}
+
 export function Hero() {
   const reducedMotion = useReducedMotion()
   const localTime = useLocalTime()
+  const { copy, format } = useI18n()
+  const { hero } = copy
 
   const lineReveal = (delay: number) => ({
     initial: reducedMotion ? { y: 0 } : { y: '112%' },
@@ -24,6 +42,12 @@ export function Hero() {
     animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
     transition: { duration: 0.9, delay: reducedMotion ? 0 : delay, ease },
   })
+
+  const facts = [
+    format(hero.factAge, { age: site.age }),
+    hero.factBuilds,
+    hero.factStatus,
+  ]
 
   return (
     <section id="home" className="relative isolate overflow-hidden pt-[104px] sm:pt-[116px]">
@@ -46,17 +70,17 @@ export function Hero() {
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-electric" />
               </span>
               <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-electric-soft/80">
-                Currently studying
+                {hero.badge}
               </span>
             </span>
-            <span className="mono hidden text-pearl/25 sm:block">NOT TAKING WORK</span>
+            <span className="mono hidden text-pearl/25 sm:block">{hero.notTakingWork}</span>
           </div>
 
-          <span className="mono hidden text-pearl/25 md:block">STUDENT / FRONT-END LEARNER</span>
+          <span className="mono hidden text-pearl/25 md:block">{hero.roleLine}</span>
 
           <div className="flex items-center gap-2.5">
             <MapPin className="h-3 w-3 text-pearl/25" strokeWidth={1.5} />
-            <span className="mono text-pearl/35">SUPHAN BURI, TH</span>
+            <span className="mono text-pearl/35">{hero.locationLine}</span>
             <span className="h-2.5 w-px bg-pearl/15" />
             <span className="font-mono text-[10px] tabular-nums tracking-[0.1em] text-pearl/45">{localTime}</span>
             <span className="mono text-pearl/20">ICT</span>
@@ -66,22 +90,20 @@ export function Hero() {
         <div className="grid items-center gap-14 pb-16 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-6 lg:pb-20 lg:pt-16 xl:gap-10">
           <div className="relative z-10 lg:col-span-7">
             <motion.div {...fadeUp(0.2, 10)} className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="mono text-pearl/25">PORTFOLIO — 2026</span>
+              <span className="mono text-pearl/25">{hero.portfolio}</span>
               <span className="h-px w-8 bg-gradient-to-r from-pearl/25 to-transparent" />
-              <span className="mono text-electric-soft/70">WEB SINCE M.3</span>
+              <span className="mono text-electric-soft/70">{hero.since}</span>
             </motion.div>
 
-            <h1 aria-label="Still in school. Still building. — _gosogood">
-              <span className="sr-only">
-                _gosogood — a student learning front-end in Suphan Buri, Thailand.
-              </span>
+            <h1 aria-label={hero.srHeading}>
+              <span className="sr-only">{hero.srDescription}</span>
               <span aria-hidden="true" className="block">
                 <span className="block overflow-hidden pb-1">
                   <motion.span
                     {...lineReveal(0.28)}
                     className="display block text-[clamp(3.2rem,7.7vw,6.8rem)] uppercase leading-[0.88] tracking-[-0.045em] text-outline"
                   >
-                    Still in
+                    {hero.title.line1}
                   </motion.span>
                 </span>
                 <span className="block overflow-hidden pb-1">
@@ -89,16 +111,17 @@ export function Hero() {
                     {...lineReveal(0.36)}
                     className="display block text-[clamp(3.2rem,7.7vw,6.8rem)] uppercase leading-[0.88] tracking-[-0.045em] text-pearl"
                   >
-                    School
+                    {hero.title.line2}
                     <span className="text-electric">.</span>
                   </motion.span>
                 </span>
                 <span className="block overflow-hidden pb-2">
                   <motion.span
                     {...lineReveal(0.44)}
-                    className="block font-serif text-[clamp(3.6rem,8.8vw,7.6rem)] italic leading-[0.84] tracking-[-0.04em] text-gradient"
+                    className="accent-serif block text-[clamp(3.6rem,8.8vw,7.6rem)] italic leading-[0.84] tracking-[-0.04em] text-gradient"
                   >
-                    still building<span className="not-italic text-electric">.</span>
+                    {hero.title.line3}
+                    <span className="not-italic text-electric">.</span>
                   </motion.span>
                 </span>
               </span>
@@ -108,20 +131,18 @@ export function Hero() {
               {...fadeUp(0.58)}
               className="mt-7 max-w-[34rem] text-pretty text-[0.94rem] leading-[1.75] text-mist md:text-base"
             >
-              I&apos;m <span className="text-pearl">_gosogood</span> — a {site.age}-year-old student in Suphan
-              Buri. I build small websites, play <span className="text-pearl">PUBG</span>, and start more projects
-              than I finish.
+              <IntroText text={format(hero.intro, { age: site.age })} />
             </motion.p>
 
             <motion.div {...fadeUp(0.68)} className="mt-8 flex flex-wrap items-center gap-3">
-              <MagneticButton onClick={() => scrollToId('work')}>See my projects</MagneticButton>
+              <MagneticButton onClick={() => scrollToId('work')}>{hero.ctaProjects}</MagneticButton>
               <MagneticButton variant="secondary" onClick={() => scrollToId('contact')}>
-                Say hi
+                {hero.ctaContact}
               </MagneticButton>
             </motion.div>
 
             <motion.div {...fadeUp(0.78)} className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2.5">
-              {heroFacts.map((fact, index) => (
+              {facts.map((fact, index) => (
                 <span key={fact} className="flex items-center gap-5">
                   {index > 0 && <span className="h-1 w-1 rounded-full bg-pearl/20" />}
                   <span className="mono text-pearl/30">{fact}</span>
@@ -145,12 +166,12 @@ export function Hero() {
         <div className="container-page flex items-center gap-6">
           <div className="hidden shrink-0 items-center gap-2 border-r border-pearl/[0.08] py-4 pr-6 md:flex">
             <span className="h-1 w-1 rounded-full bg-electric" />
-            <span className="mono text-pearl/30">Tools I use</span>
+            <span className="mono text-pearl/30">{hero.toolsLabel}</span>
           </div>
           <Marquee items={marqueeWords} className="py-4" duration={46} />
           <div className="hidden shrink-0 items-center gap-2 border-l border-pearl/[0.08] py-4 pl-6 md:flex">
             <ArrowDown className="h-3 w-3 text-pearl/30" strokeWidth={1.5} />
-            <span className="mono text-pearl/25">Scroll</span>
+            <span className="mono text-pearl/25">{hero.scroll}</span>
           </div>
         </div>
       </div>
@@ -159,6 +180,23 @@ export function Hero() {
 }
 
 function HeroCard() {
+  const { copy } = useI18n()
+  const { card } = copy.hero
+  const base = copy.common.locationShort.split(',')[0]
+
+  const rows = [
+    { label: card.base, value: base },
+    { label: card.age, value: String(site.age) },
+    { label: card.school, value: card.schoolValue },
+    { label: card.statusLabel, value: card.statusValue },
+  ]
+
+  const tags = [
+    { label: card.tags[0], icon: Gamepad2 },
+    { label: card.tags[1], icon: Music2 },
+    { label: card.tags[2], icon: Code2 },
+  ]
+
   return (
     <div className="relative mx-auto w-full max-w-[410px] lg:ml-auto lg:mr-1 xl:mr-6">
       <div
@@ -196,7 +234,7 @@ function HeroCard() {
             <Boxes className="h-3.5 w-3.5" strokeWidth={1.5} />
           </span>
           <div>
-            <p className="mono text-[7px] text-pearl/30">PUBLIC BUILDS</p>
+            <p className="mono text-[7px] text-pearl/30">{card.publicBuilds}</p>
             <p className="font-display text-sm leading-tight text-pearl">
               04<span className="text-electric">.</span>
             </p>
@@ -225,10 +263,10 @@ function HeroCard() {
               <span className="h-1.5 w-1.5 rounded-full bg-pearl/15" />
               <span className="h-1.5 w-1.5 rounded-full bg-electric/70 shadow-[0_0_6px_#6E8BFF]" />
             </div>
-            <span className="mono text-[7.5px] text-pearl/25">IDENTITY / 2026</span>
+            <span className="mono text-[7.5px] text-pearl/25">{card.identity}</span>
             <span className="mono flex items-center gap-1.5 text-[7.5px] text-electric-soft/70">
               <span className="h-1 w-1 rounded-full bg-electric" />
-              STUDYING
+              {card.studying}
             </span>
           </div>
 
@@ -256,36 +294,31 @@ function HeroCard() {
               </div>
 
               <div className="text-right">
-                <p className="mono text-[7px] text-pearl/25">STATUS</p>
+                <p className="mono text-[7px] text-pearl/25">{card.status}</p>
                 <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-electric/20 bg-electric/[0.06] px-2 py-1">
                   <span className="h-1 w-1 rounded-full bg-electric" />
                   <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-electric-soft/75">
-                    Not taking work
+                    {card.notTakingWork}
                   </span>
                 </span>
-                <p className="mono mt-4 text-[7px] text-pearl/20">SINCE / M.3</p>
-                <p className="mt-1 font-mono text-[9px] text-pearl/45">SUPHAN BURI · TH</p>
+                <p className="mono mt-4 text-[7px] text-pearl/20">{card.since}</p>
+                <p className="mt-1 font-mono text-[9px] text-pearl/45">{card.location}</p>
               </div>
             </div>
 
             <div className="mt-6">
-              <p className="mono text-[7.5px] text-pearl/25">DEVELOPER IDENTITY</p>
+              <p className="mono text-[7.5px] text-pearl/25">{card.developerIdentity}</p>
               <div className="mt-1.5 flex items-baseline gap-1">
                 <span className="display text-[1.9rem] font-semibold tracking-[-0.05em] text-pearl">
                   <span className="text-electric">_</span>gosogood
                 </span>
               </div>
-              <p className="mt-1 text-[10px] text-pearl/55">{site.realNameEn}</p>
-              <p className="mt-0.5 text-[11px] text-mist">Student &amp; front-end learner</p>
+              <p className="mt-1 text-[10px] text-pearl/55">{copy.common.realName}</p>
+              <p className="mt-0.5 text-[11px] text-mist">{card.role}</p>
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-pearl/[0.08] bg-pearl/[0.06]">
-              {[
-                { label: 'BASE', value: 'Suphan Buri' },
-                { label: 'AGE', value: String(site.age) },
-                { label: 'SCHOOL', value: 'Songphinong' },
-                { label: 'STATUS', value: 'Studying' },
-              ].map((row) => (
+              {rows.map((row) => (
                 <div key={row.label} className="bg-[#0B0E14]/95 px-3 py-2.5">
                   <p className="font-mono text-[6.5px] uppercase tracking-[0.18em] text-pearl/20">{row.label}</p>
                   <p className="mt-1 text-[10px] text-pearl/65">{row.value}</p>
@@ -295,11 +328,7 @@ function HeroCard() {
 
             <div className="mt-4 flex items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-1.5">
-                {[
-                  { label: 'PUBG', icon: Gamepad2 },
-                  { label: 'MUSIC', icon: Music2 },
-                  { label: 'CODE', icon: Code2 },
-                ].map((tag) => (
+                {tags.map((tag) => (
                   <span
                     key={tag.label}
                     className="inline-flex items-center gap-1 rounded-full border border-pearl/[0.09] bg-pearl/[0.025] px-2 py-1 font-mono text-[6.5px] tracking-[0.1em] text-pearl/40"
@@ -315,7 +344,7 @@ function HeroCard() {
 
           <div className="relative flex items-center justify-between border-t border-pearl/[0.07] px-4 py-2.5">
             <span className="font-mono text-[6.5px] uppercase tracking-[0.18em] text-pearl/20">
-              STUDENT — NOT FOR HIRE
+              {card.footer}
             </span>
             <span className="font-mono text-[6.5px] tracking-[0.12em] text-pearl/25">{site.coordinates}</span>
           </div>

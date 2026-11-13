@@ -12,11 +12,14 @@ export default {
         'electric-soft': '#B7C4FF',
       },
       fontFamily: {
-        sans: ['"Space Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'ui-serif', 'Georgia', 'serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['"Space Grotesk"', '"Noto Sans Thai"', '"Noto Sans SC"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Noto Sans Thai"', '"Noto Sans SC"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Instrument Serif"', '"Noto Serif Thai"', '"Noto Serif SC"', 'ui-serif', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', '"Noto Sans Thai"', '"Noto Sans SC"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
         thai: ['"Noto Sans Thai"', '"Space Grotesk"', 'system-ui', 'sans-serif'],
+        sc: ['"Noto Sans SC"', '"Space Grotesk"', 'system-ui', 'sans-serif'],
+        'serif-thai': ['"Noto Serif Thai"', '"Instrument Serif"', 'serif'],
+        'serif-sc': ['"Noto Serif SC"', '"Instrument Serif"', 'serif'],
       },
       animation: {
         marquee: 'marquee 42s linear infinite',

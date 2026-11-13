@@ -69,6 +69,16 @@
     @apply font-display font-medium;
   }
 
+  .accent-serif {
+    font-family: 'Instrument Serif', ui-serif, Georgia, serif;
+    font-style: italic;
+  }
+
+  .brand-wordmark {
+    line-height: 0.82;
+    letter-spacing: -0.07em;
+  }
+
   .text-outline {
     color: transparent;
     -webkit-text-stroke: 1px rgba(242, 240, 232, 0.32);
@@ -232,6 +242,78 @@
   .text-outline {
     -webkit-text-stroke-width: 0.8px;
   }
+}
+
+/* Language-aware typography: Thai and Chinese need more vertical room than the
+   tight Latin display scale, and complex glyphs should not be outlined. */
+html[lang='th'] .display {
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+}
+
+html[lang='zh'] .display {
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+html[lang='th'] .display.brand-wordmark,
+html[lang='zh'] .display.brand-wordmark {
+  line-height: 0.82;
+  letter-spacing: -0.07em;
+}
+
+html[lang='th'] .accent-serif {
+  font-family: 'Instrument Serif', 'Noto Serif Thai', ui-serif, Georgia, serif;
+  font-style: normal;
+  line-height: 1.24;
+}
+
+html[lang='zh'] .accent-serif {
+  font-family: 'Instrument Serif', 'Noto Serif SC', ui-serif, Georgia, serif;
+  font-style: normal;
+  line-height: 1.18;
+}
+
+html[lang='th'] .font-serif {
+  font-family: 'Instrument Serif', 'Noto Serif Thai', ui-serif, Georgia, serif;
+  font-style: normal;
+}
+
+html[lang='zh'] .font-serif {
+  font-family: 'Instrument Serif', 'Noto Serif SC', ui-serif, Georgia, serif;
+  font-style: normal;
+}
+
+html[lang='th'] .text-outline,
+html[lang='zh'] .text-outline {
+  color: rgba(242, 240, 232, 0.5);
+  -webkit-text-stroke: 0;
+}
+
+html[lang='th'] .mono,
+html[lang='th'] .font-mono {
+  letter-spacing: 0.08em;
+}
+
+html[lang='zh'] .mono,
+html[lang='zh'] .font-mono {
+  letter-spacing: 0.08em;
+}
+
+html[lang='th'] .nav-label {
+  letter-spacing: 0.02em;
+}
+
+html[lang='zh'] .nav-label {
+  letter-spacing: 0.06em;
+}
+
+html[lang='th'] .field {
+  line-height: 1.6;
+}
+
+html[lang='zh'] .field {
+  line-height: 1.55;
 }
 
 @media (prefers-reduced-motion: reduce) {

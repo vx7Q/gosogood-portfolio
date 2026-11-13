@@ -1,3 +1,4 @@
+import { useI18n } from '@/lib/i18n'
 import { GridBackground } from '@/components/ui/GridBackground'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
 import { Navbar } from '@/components/layout/Navbar'
@@ -11,13 +12,15 @@ import { Skills } from '@/sections/Skills'
 import { Contact } from '@/sections/Contact'
 
 export default function App() {
+  const { copy } = useI18n()
+
   return (
     <>
       <a
         href="#main"
         className="sr-only z-[200] focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:rounded-full focus:bg-pearl focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:text-ink"
       >
-        Skip to content
+        {copy.common.skipToContent}
       </a>
 
       <GridBackground />
