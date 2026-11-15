@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowDown, Boxes, Code2, Gamepad2, MapPin, Music2 } from 'lucide-react'
+import { ArrowDown, Gamepad2, MapPin, Music2, Code2 } from 'lucide-react'
 import { marqueeWords, site } from '@/lib/data'
 import { useI18n } from '@/lib/i18n'
 import { scrollToId } from '@/lib/scroll'
@@ -18,7 +18,7 @@ function IntroText({ text }: { text: string }) {
       {parts.map((part, index) => (
         <Fragment key={`${part}-${index}`}>
           {part}
-          {index < parts.length - 1 && <span className="text-pearl">PUBG</span>}
+          {index < parts.length - 1 && <span className="font-medium text-pearl">PUBG</span>}
         </Fragment>
       ))}
     </>
@@ -38,61 +38,45 @@ export function Hero() {
   })
 
   const fadeUp = (delay: number, distance = 20) => ({
-    initial: reducedMotion ? { opacity: 1 } : { opacity: 0, y: distance, filter: 'blur(7px)' },
-    animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-    transition: { duration: 0.9, delay: reducedMotion ? 0 : delay, ease },
+    initial: reducedMotion ? { opacity: 1 } : { opacity: 0, y: distance },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay: reducedMotion ? 0 : delay, ease },
   })
 
-  const facts = [
-    format(hero.factAge, { age: site.age }),
-    hero.factBuilds,
-    hero.factStatus,
-  ]
+  const facts = [format(hero.factAge, { age: site.age }), hero.factBuilds, hero.factStatus]
 
   return (
-    <section id="home" className="relative isolate overflow-hidden pt-[104px] sm:pt-[116px]">
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-10 left-0 select-none whitespace-nowrap font-display text-[24vw] leading-none tracking-[-0.08em] text-pearl/[0.018]"
-      >
-        _gosogood
-      </span>
-
-      <div className="container-page relative z-10">
+    <section id="home" className="relative overflow-hidden border-b border-pearl/[0.12] pt-[76px]">
+      <div className="container-page">
         <motion.div
-          {...fadeUp(0.1, 8)}
-          className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-pearl/[0.08] pb-4"
+          {...fadeUp(0.08, 8)}
+          className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-pearl/[0.12] py-4"
         >
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-electric/20 bg-electric/[0.06] py-1.5 pl-2.5 pr-3.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-electric/60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-electric" />
-              </span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-electric-soft/80">
-                {hero.badge}
-              </span>
+          <div className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-2">
+              <span className="h-2 w-2 bg-electric" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-electric">{hero.badge}</span>
             </span>
-            <span className="mono hidden text-pearl/25 sm:block">{hero.notTakingWork}</span>
+            <span className="mono hidden text-pearl/45 sm:block">{hero.notTakingWork}</span>
           </div>
 
-          <span className="mono hidden text-pearl/25 md:block">{hero.roleLine}</span>
+          <span className="mono hidden text-pearl/40 md:block">{hero.roleLine}</span>
 
           <div className="flex items-center gap-2.5">
-            <MapPin className="h-3 w-3 text-pearl/25" strokeWidth={1.5} />
-            <span className="mono text-pearl/35">{hero.locationLine}</span>
-            <span className="h-2.5 w-px bg-pearl/15" />
-            <span className="font-mono text-[10px] tabular-nums tracking-[0.1em] text-pearl/45">{localTime}</span>
-            <span className="mono text-pearl/20">ICT</span>
+            <MapPin className="h-3.5 w-3.5 text-pearl/45" strokeWidth={1.5} />
+            <span className="mono text-pearl/55">{hero.locationLine}</span>
+            <span className="h-3 w-px bg-pearl/20" />
+            <span className="font-mono text-[11px] tabular-nums tracking-[0.08em] text-pearl/65">{localTime}</span>
+            <span className="mono text-pearl/40">ICT</span>
           </div>
         </motion.div>
 
-        <div className="grid items-center gap-14 pb-16 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-6 lg:pb-20 lg:pt-16 xl:gap-10">
-          <div className="relative z-10 lg:col-span-7">
-            <motion.div {...fadeUp(0.2, 10)} className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="mono text-pearl/25">{hero.portfolio}</span>
-              <span className="h-px w-8 bg-gradient-to-r from-pearl/25 to-transparent" />
-              <span className="mono text-electric-soft/70">{hero.since}</span>
+        <div className="grid gap-12 py-12 lg:grid-cols-12 lg:items-start lg:gap-10 lg:py-16 xl:gap-16">
+          <div className="lg:col-span-8">
+            <motion.div {...fadeUp(0.16, 10)} className="mb-6 flex flex-wrap items-center gap-3">
+              <span className="mono text-pearl/50">{hero.portfolio}</span>
+              <span className="h-px w-10 bg-pearl/30" />
+              <span className="mono text-electric">{hero.since}</span>
             </motion.div>
 
             <h1 aria-label={hero.srHeading}>
@@ -100,16 +84,16 @@ export function Hero() {
               <span aria-hidden="true" className="block">
                 <span className="block overflow-hidden pb-1">
                   <motion.span
-                    {...lineReveal(0.28)}
-                    className="display block text-[clamp(3.2rem,7.7vw,6.8rem)] uppercase leading-[0.88] tracking-[-0.045em] text-outline"
+                    {...lineReveal(0.22)}
+                    className="display hero-display block text-[clamp(3.3rem,8.2vw,8.2rem)] uppercase leading-[0.88] tracking-[-0.05em] text-outline"
                   >
                     {hero.title.line1}
                   </motion.span>
                 </span>
                 <span className="block overflow-hidden pb-1">
                   <motion.span
-                    {...lineReveal(0.36)}
-                    className="display block text-[clamp(3.2rem,7.7vw,6.8rem)] uppercase leading-[0.88] tracking-[-0.045em] text-pearl"
+                    {...lineReveal(0.3)}
+                    className="display hero-display block text-[clamp(3.3rem,8.2vw,8.2rem)] uppercase leading-[0.88] tracking-[-0.05em] text-pearl"
                   >
                     {hero.title.line2}
                     <span className="text-electric">.</span>
@@ -117,61 +101,69 @@ export function Hero() {
                 </span>
                 <span className="block overflow-hidden pb-2">
                   <motion.span
-                    {...lineReveal(0.44)}
-                    className="accent-serif block text-[clamp(3.6rem,8.8vw,7.6rem)] italic leading-[0.84] tracking-[-0.04em] text-gradient"
+                    {...lineReveal(0.38)}
+                    className="accent-serif hero-display block text-[clamp(3.6rem,9vw,9rem)] italic leading-[0.84] tracking-[-0.04em] text-electric"
                   >
                     {hero.title.line3}
-                    <span className="not-italic text-electric">.</span>
+                    <span className="not-italic text-pearl">.</span>
                   </motion.span>
                 </span>
               </span>
             </h1>
 
             <motion.p
-              {...fadeUp(0.58)}
-              className="mt-7 max-w-[34rem] text-pretty text-[0.94rem] leading-[1.75] text-mist md:text-base"
+              {...fadeUp(0.5)}
+              className="mt-8 max-w-[42rem] text-pretty text-[1.06rem] leading-[1.8] text-mist md:text-[1.12rem]"
             >
               <IntroText text={format(hero.intro, { age: site.age })} />
             </motion.p>
 
-            <motion.div {...fadeUp(0.68)} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.div {...fadeUp(0.6)} className="mt-8 flex flex-wrap items-center gap-3">
               <MagneticButton onClick={() => scrollToId('work')}>{hero.ctaProjects}</MagneticButton>
               <MagneticButton variant="secondary" onClick={() => scrollToId('contact')}>
                 {hero.ctaContact}
               </MagneticButton>
             </motion.div>
 
-            <motion.div {...fadeUp(0.78)} className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2.5">
+            <motion.div
+              {...fadeUp(0.7)}
+              className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-2.5 border-t border-pearl/[0.12] pt-5"
+            >
               {facts.map((fact, index) => (
                 <span key={fact} className="flex items-center gap-5">
-                  {index > 0 && <span className="h-1 w-1 rounded-full bg-pearl/20" />}
-                  <span className="mono text-pearl/30">{fact}</span>
+                  {index > 0 && <span className="h-1 w-1 bg-pearl/30" />}
+                  <span className="mono text-pearl/60">{fact}</span>
                 </span>
               ))}
             </motion.div>
           </div>
 
           <motion.div
-            initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 36, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.15, delay: reducedMotion ? 0 : 0.48, ease }}
-            className="relative lg:col-span-5"
+            initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: reducedMotion ? 0 : 0.42, ease }}
+            className="lg:col-span-4"
           >
             <HeroCard />
           </motion.div>
         </div>
       </div>
 
-      <div className="relative z-10 border-y border-pearl/[0.08] bg-ink/30 backdrop-blur-sm">
+      <div className="border-t border-pearl/[0.12] bg-panel">
         <div className="container-page flex items-center gap-6">
-          <div className="hidden shrink-0 items-center gap-2 border-r border-pearl/[0.08] py-4 pr-6 md:flex">
-            <span className="h-1 w-1 rounded-full bg-electric" />
-            <span className="mono text-pearl/30">{hero.toolsLabel}</span>
+          <div className="hidden shrink-0 items-center gap-2 border-r border-pearl/[0.14] py-4 pr-6 md:flex">
+            <span className="h-1.5 w-1.5 bg-electric" />
+            <span className="mono">{hero.toolsLabel}</span>
           </div>
-          <Marquee items={marqueeWords} className="py-4" duration={46} />
-          <div className="hidden shrink-0 items-center gap-2 border-l border-pearl/[0.08] py-4 pl-6 md:flex">
-            <ArrowDown className="h-3 w-3 text-pearl/30" strokeWidth={1.5} />
-            <span className="mono text-pearl/25">{hero.scroll}</span>
+          <Marquee
+            items={marqueeWords}
+            className="py-4 text-pearl/55"
+            itemClassName="text-[clamp(0.95rem,1.7vw,1.3rem)]"
+            duration={46}
+          />
+          <div className="hidden shrink-0 items-center gap-2 border-l border-pearl/[0.14] py-4 pl-6 md:flex">
+            <ArrowDown className="h-3.5 w-3.5 text-pearl/50" strokeWidth={1.5} />
+            <span className="mono">{hero.scroll}</span>
           </div>
         </div>
       </div>
@@ -198,157 +190,64 @@ function HeroCard() {
   ]
 
   return (
-    <div className="relative mx-auto w-full max-w-[410px] lg:ml-auto lg:mr-1 xl:mr-6">
-      <div
-        className="absolute -inset-14 -z-10 rounded-full opacity-70 blur-[74px]"
-        style={{
-          background:
-            'radial-gradient(circle at 55% 35%, rgba(110, 139, 255, 0.3), rgba(110, 139, 255, 0.12) 42%, transparent 70%)',
-        }}
-        aria-hidden="true"
-      />
-
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[122%] w-[122%] -translate-x-1/2 -translate-y-1/2"
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0 rounded-full border border-pearl/[0.055]" />
-        <div
-          className="absolute inset-[9%] rounded-[46%] border border-pearl/[0.045]"
-          style={{ transform: 'rotate(28deg)' }}
-        />
-        <div className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-electric/60 shadow-[0_0_12px_#6E8BFF]" />
-        <div className="absolute bottom-[9%] right-[14%] h-1 w-1 rounded-full bg-pearl/70 shadow-[0_0_10px_#F2F0E8]" />
+    <div className="border border-electric bg-electric text-white">
+      <div className="flex items-center justify-between gap-3 border-b border-white/25 px-5 py-3.5">
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/70">{card.identity}</span>
+        <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.1em] text-white/80">
+          <span className="h-1.5 w-1.5 rounded-full bg-white" />
+          {card.studying}
+        </span>
       </div>
 
-      <div className="pointer-events-none absolute -inset-5 z-0 hidden sm:block" aria-hidden="true">
-        <span className="absolute left-0 top-0 h-5 w-5 border-l border-t border-pearl/20" />
-        <span className="absolute right-0 top-0 h-5 w-5 border-r border-t border-pearl/20" />
-        <span className="absolute bottom-0 left-0 h-5 w-5 border-b border-l border-pearl/20" />
-        <span className="absolute bottom-0 right-0 h-5 w-5 border-b border-r border-pearl/20" />
-      </div>
-
-      <div className="absolute -right-4 -top-10 z-20 hidden animate-float-slow md:block">
-        <div className="flex items-center gap-3 rounded-full border border-pearl/[0.1] bg-panel/90 py-2 pl-2.5 pr-4 shadow-soft backdrop-blur-xl">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-electric/10 text-electric">
-            <Boxes className="h-3.5 w-3.5" strokeWidth={1.5} />
-          </span>
+      <div className="px-5 py-6 sm:px-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="mono text-[7px] text-pearl/30">{card.publicBuilds}</p>
-            <p className="font-display text-sm leading-tight text-pearl">
-              04<span className="text-electric">.</span>
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/65">
+              {card.developerIdentity}
+            </p>
+            <p className="display mt-2 text-[clamp(2.1rem,3.2vw,2.9rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-white">
+              _gosogood
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/65">{card.publicBuilds}</p>
+            <p className="display mt-1 text-[2.4rem] leading-none tracking-[-0.04em] text-white">
+              04<span className="text-white/45">.</span>
             </p>
           </div>
         </div>
+
+        <p className="mt-5 text-[17px] font-medium text-white">{copy.common.realName}</p>
+        <p className="mt-1 text-[14px] leading-relaxed text-white/75">{copy.common.role}</p>
       </div>
 
-      <div className="relative rounded-[26px] border border-pearl/[0.12] bg-gradient-to-b from-pearl/[0.07] to-pearl/[0.02] p-[6px] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9),0_0_80px_-30px_rgba(110,139,255,0.3)]">
-        <div
-          className="pointer-events-none absolute inset-0 rounded-[26px] opacity-60"
-          style={{
-            background:
-              'linear-gradient(130deg, rgba(242,240,232,0.12), transparent 28%, transparent 72%, rgba(110,139,255,0.12))',
-          }}
-          aria-hidden="true"
-        />
-        <div className="relative overflow-hidden rounded-[21px] border border-pearl/[0.06] bg-[#090C12]/95">
-          <div
-            className="absolute inset-0 bg-grid-lines bg-[size:28px_28px] opacity-[0.35] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_70%)]"
-            aria-hidden="true"
-          />
+      <dl className="grid grid-cols-2 gap-px border-t border-white/25 bg-white/25">
+        {rows.map((row) => (
+          <div key={row.label} className="bg-electric px-5 py-4">
+            <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/65">{row.label}</dt>
+            <dd className="mt-1.5 text-[15px] leading-snug text-white">{row.value}</dd>
+          </div>
+        ))}
+      </dl>
 
-          <div className="relative flex items-center justify-between border-b border-pearl/[0.07] px-4 py-3">
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-pearl/15" />
-              <span className="h-1.5 w-1.5 rounded-full bg-pearl/15" />
-              <span className="h-1.5 w-1.5 rounded-full bg-electric/70 shadow-[0_0_6px_#6E8BFF]" />
-            </div>
-            <span className="mono text-[7.5px] text-pearl/25">{card.identity}</span>
-            <span className="mono flex items-center gap-1.5 text-[7.5px] text-electric-soft/70">
-              <span className="h-1 w-1 rounded-full bg-electric" />
-              {card.studying}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/25 px-5 py-4">
+        <div className="flex flex-wrap items-center gap-1.5">
+          {tags.map((tag) => (
+            <span
+              key={tag.label}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.06em] text-white/85"
+            >
+              <tag.icon className="h-3 w-3" strokeWidth={1.6} />
+              {tag.label}
             </span>
-          </div>
-
-          <div className="relative p-5">
-            <div className="flex items-start justify-between">
-              <div className="relative">
-                <div className="absolute -inset-3 rounded-full bg-electric/20 blur-xl" aria-hidden="true" />
-                <div
-                  className="relative flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(circle at 30% 22%, #ffffff 0%, #dfe6ff 10%, #b7c4ff 20%, #7a97ff 38%, #3b4fc4 58%, #151a3a 78%, #07090d 100%)',
-                    boxShadow:
-                      'inset -10px -14px 26px rgba(0,0,0,0.75), inset 4px 6px 18px rgba(255,255,255,0.28), 0 20px 40px -18px rgba(110,139,255,0.65)',
-                  }}
-                  aria-hidden="true"
-                >
-                  <div className="absolute left-[15%] top-[10%] h-[32%] w-[48%] rounded-full bg-pearl/50 blur-xl" />
-                  <div className="absolute inset-[17%] rounded-full border border-pearl/15" />
-                  <span className="relative font-display text-[2.2rem] font-medium tracking-[-0.1em] text-pearl/90">
-                    _
-                  </span>
-                </div>
-                <span className="absolute -right-0.5 top-1 h-2 w-2 rounded-full bg-pearl shadow-[0_0_10px_#F2F0E8]" />
-              </div>
-
-              <div className="text-right">
-                <p className="mono text-[7px] text-pearl/25">{card.status}</p>
-                <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-electric/20 bg-electric/[0.06] px-2 py-1">
-                  <span className="h-1 w-1 rounded-full bg-electric" />
-                  <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-electric-soft/75">
-                    {card.notTakingWork}
-                  </span>
-                </span>
-                <p className="mono mt-4 text-[7px] text-pearl/20">{card.since}</p>
-                <p className="mt-1 font-mono text-[9px] text-pearl/45">{card.location}</p>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <p className="mono text-[7.5px] text-pearl/25">{card.developerIdentity}</p>
-              <div className="mt-1.5 flex items-baseline gap-1">
-                <span className="display text-[1.9rem] font-semibold tracking-[-0.05em] text-pearl">
-                  <span className="text-electric">_</span>gosogood
-                </span>
-              </div>
-              <p className="mt-1 text-[10px] text-pearl/55">{copy.common.realName}</p>
-              <p className="mt-0.5 text-[11px] text-mist">{card.role}</p>
-            </div>
-
-            <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-pearl/[0.08] bg-pearl/[0.06]">
-              {rows.map((row) => (
-                <div key={row.label} className="bg-[#0B0E14]/95 px-3 py-2.5">
-                  <p className="font-mono text-[6.5px] uppercase tracking-[0.18em] text-pearl/20">{row.label}</p>
-                  <p className="mt-1 text-[10px] text-pearl/65">{row.value}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 flex items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {tags.map((tag) => (
-                  <span
-                    key={tag.label}
-                    className="inline-flex items-center gap-1 rounded-full border border-pearl/[0.09] bg-pearl/[0.025] px-2 py-1 font-mono text-[6.5px] tracking-[0.1em] text-pearl/40"
-                  >
-                    <tag.icon className="h-2 w-2" strokeWidth={1.6} />
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
-              <SocialLinks iconClassName="h-6 w-6 justify-center rounded-full border border-pearl/[0.09] bg-pearl/[0.02]" />
-            </div>
-          </div>
-
-          <div className="relative flex items-center justify-between border-t border-pearl/[0.07] px-4 py-2.5">
-            <span className="font-mono text-[6.5px] uppercase tracking-[0.18em] text-pearl/20">
-              {card.footer}
-            </span>
-            <span className="font-mono text-[6.5px] tracking-[0.12em] text-pearl/25">{site.coordinates}</span>
-          </div>
+          ))}
         </div>
+        <SocialLinks inverse className="gap-0.5" iconClassName="h-8 w-8" />
+      </div>
+
+      <div className="flex items-center justify-between gap-3 border-t border-white/25 px-5 py-3 font-mono text-[9.5px] uppercase tracking-[0.1em] text-white/60">
+        <span>{card.footer}</span>
+        <span>{site.coordinates}</span>
       </div>
     </div>
   )

@@ -17,7 +17,7 @@ export function Marquee({ items, className, itemClassName, duration = 42, separa
         <span key={`${key}-${item}-${index}`} className="flex items-center">
           <span
             className={cn(
-              'display whitespace-nowrap px-7 text-[clamp(1.05rem,2.1vw,1.55rem)] font-medium uppercase tracking-[-0.02em] text-pearl/35 md:px-9',
+              'display whitespace-nowrap px-7 text-[clamp(1.05rem,2.1vw,1.55rem)] font-medium uppercase tracking-[-0.02em] md:px-9',
               itemClassName,
             )}
           >

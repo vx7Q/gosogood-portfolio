@@ -12,14 +12,7 @@ export function LanguageSwitcher({ size = 'md', className }: LanguageSwitcherPro
   const { lang, setLang, copy } = useI18n()
 
   return (
-    <div
-      role="group"
-      aria-label={copy.common.language}
-      className={cn(
-        'relative flex shrink-0 items-center rounded-full border border-pearl/[0.1] bg-pearl/[0.025] p-0.5',
-        className,
-      )}
-    >
+    <div role="group" aria-label={copy.common.language} className={cn('flex shrink-0 items-center gap-1', className)}>
       {languages.map((language) => {
         const active = lang === language
         const meta = languageMeta[language]
@@ -33,13 +26,13 @@ export function LanguageSwitcher({ size = 'md', className }: LanguageSwitcherPro
             aria-label={meta.nativeName}
             title={meta.nativeName}
             className={cn(
-              'relative rounded-full font-mono uppercase leading-none transition-all duration-300',
+              'relative border-b-2 font-mono uppercase leading-none transition-colors duration-300',
               size === 'sm'
-                ? 'h-7 min-w-[27px] px-1.5 text-[8px] tracking-[0.08em]'
-                : 'h-8 min-w-[34px] px-2 text-[9px] tracking-[0.1em]',
+                ? 'h-8 min-w-[30px] border-b px-1 text-[11px] tracking-[0.06em]'
+                : 'h-9 min-w-[36px] px-1.5 text-[12px] tracking-[0.08em]',
               active
-                ? 'bg-pearl text-ink shadow-[0_4px_16px_rgba(0,0,0,0.35)]'
-                : 'text-pearl/40 hover:bg-pearl/[0.05] hover:text-pearl',
+                ? 'border-electric text-pearl'
+                : 'border-transparent text-pearl/40 hover:text-pearl',
             )}
           >
             {meta.short}
@@ -56,8 +49,8 @@ export function LanguagePicker({ className }: { className?: string }) {
   return (
     <div className={className}>
       <div className="flex items-center justify-between">
-        <p className="mono text-pearl/25">{copy.common.language}</p>
-        <Globe2 className="h-3.5 w-3.5 text-pearl/25" strokeWidth={1.4} />
+        <p className="mono">{copy.common.language}</p>
+        <Globe2 className="h-4 w-4 text-pearl/40" strokeWidth={1.4} />
       </div>
 
       <div role="group" aria-label={copy.common.language} className="mt-3 grid grid-cols-3 gap-2">
@@ -72,31 +65,24 @@ export function LanguagePicker({ className }: { className?: string }) {
               onClick={() => setLang(language)}
               aria-pressed={active}
               className={cn(
-                'group relative overflow-hidden rounded-2xl border px-3 py-3 text-left transition-all duration-300',
+                'group relative rounded-lg border px-3 py-3 text-left transition-colors duration-300',
                 active
-                  ? 'border-electric/35 bg-electric/[0.08]'
-                  : 'border-pearl/[0.08] bg-pearl/[0.02] hover:border-pearl/[0.2] hover:bg-pearl/[0.04]',
+                  ? 'border-electric bg-electric/[0.06]'
+                  : 'border-pearl/[0.14] bg-panel hover:border-pearl/30',
               )}
             >
               <span
                 className={cn(
-                  'block truncate text-[12px] leading-tight transition-colors',
-                  active ? 'text-pearl' : 'text-pearl/55 group-hover:text-pearl/80',
+                  'block truncate text-[14px] leading-tight',
+                  active ? 'text-pearl' : 'text-pearl/65 group-hover:text-pearl',
                 )}
               >
                 {meta.nativeName}
               </span>
-              <span
-                className={cn(
-                  'mono mt-1.5 block text-[6.5px] tracking-[0.12em]',
-                  active ? 'text-electric-soft/55' : 'text-pearl/20',
-                )}
-              >
+              <span className="mono mt-1.5 block text-[10px] tracking-[0.08em] text-pearl/45">
                 {meta.englishName}
               </span>
-              {active && (
-                <span className="absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-electric shadow-[0_0_8px_#6E8BFF]" />
-              )}
+              {active && <span className="absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-electric" />}
             </button>
           )
         })}

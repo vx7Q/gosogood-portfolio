@@ -23,11 +23,11 @@ export function Logo({ className, markClassName, wordmarkClassName }: LogoProps)
         )}
         aria-hidden="true"
       >
-        <span className="absolute inset-[3px] rounded-full border border-electric/50" />
-        <span className="absolute inset-[9px] rounded-full border border-electric-soft/55" />
-        <span className="absolute inset-[-2px] rotate-[-28deg] rounded-[50%] border border-pearl/15" />
-        <span className="absolute h-1.5 w-1.5 rounded-full bg-electric shadow-[0_0_10px_#6E8BFF]" />
-        <span className="absolute right-1 top-1.5 h-0.5 w-0.5 rounded-full bg-pearl shadow-[0_0_6px_#F2F0E8]" />
+        <span className="absolute inset-[3px] rounded-full border border-electric/60" />
+        <span className="absolute inset-[9px] rounded-full border border-electric/40" />
+        <span className="absolute inset-[-2px] rotate-[-28deg] rounded-[50%] border border-pearl/20" />
+        <span className="absolute h-1.5 w-1.5 rounded-full bg-electric" />
+        <span className="absolute right-1 top-1.5 h-0.5 w-0.5 rounded-full bg-pearl" />
       </span>
       <span
         className={cn(

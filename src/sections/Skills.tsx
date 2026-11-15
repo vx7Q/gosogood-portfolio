@@ -48,7 +48,7 @@ export function Skills() {
                 const isOpen = open === index
                 return (
                   <Reveal key={item.number} delay={index * 0.035}>
-                    <div className="border-b border-pearl/[0.08]">
+                    <div className="border-b border-pearl/[0.14]">
                       <button
                         type="button"
                         onClick={() => setOpen(isOpen ? -1 : index)}
@@ -56,13 +56,13 @@ export function Skills() {
                         aria-expanded={isOpen}
                         aria-controls={`skill-panel-${index}`}
                       >
-                        <span className="mono mt-1 w-5 shrink-0 text-pearl/15 sm:mt-0">{item.number}</span>
+                        <span className="mono mt-1 w-6 shrink-0 text-pearl/40 sm:mt-0">{item.number}</span>
                         <span
                           className={cn(
-                            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300',
+                            'flex h-10 w-10 shrink-0 items-center justify-center rounded-md border transition-colors duration-300',
                             isOpen
                               ? 'border-electric/30 bg-electric/[0.08] text-electric'
-                              : 'border-pearl/[0.08] bg-pearl/[0.02] text-pearl/35 group-hover:text-pearl/60',
+                              : 'border-pearl/[0.14] bg-panel text-pearl/45 group-hover:text-pearl/70',
                           )}
                         >
                           {skillIcons[item.icon]}
@@ -72,11 +72,11 @@ export function Skills() {
                             <span className="display block text-[clamp(1.25rem,2.4vw,1.8rem)] tracking-[-0.035em] text-pearl">
                               {item.title}
                             </span>
-                            <span className="rounded-full border border-pearl/[0.08] bg-pearl/[0.025] px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-[0.1em] text-pearl/30">
+                            <span className="rounded-full border border-pearl/[0.18] bg-panel px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.06em] text-pearl/60">
                               {item.level}
                             </span>
                           </span>
-                          <span className="mt-0.5 block text-[10px] leading-relaxed text-pearl/30">
+                          <span className="mt-1.5 block text-[13px] leading-relaxed text-pearl/60">
                             {item.subtitle}
                           </span>
                         </span>
@@ -84,8 +84,8 @@ export function Skills() {
                           className={cn(
                             'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-500 sm:mt-0',
                             isOpen
-                              ? 'rotate-45 border-electric/30 bg-electric/[0.08] text-electric'
-                              : 'border-pearl/[0.1] text-pearl/30 group-hover:border-pearl/25 group-hover:text-pearl/60',
+                              ? 'rotate-45 border-electric bg-electric text-white'
+                              : 'border-pearl/[0.18] text-pearl/45 group-hover:border-pearl/40 group-hover:text-pearl',
                           )}
                         >
                           <Plus className="h-3.5 w-3.5" strokeWidth={1.6} />
@@ -103,23 +103,23 @@ export function Skills() {
                             className="overflow-hidden"
                           >
                             <div className="grid gap-6 pb-7 pl-8 sm:grid-cols-12 sm:pl-[4.5rem]">
-                              <p className="text-pretty text-[0.88rem] leading-[1.75] text-mist sm:col-span-7">
+                              <p className="text-pretty text-[0.96rem] leading-[1.75] text-mist sm:col-span-7">
                                 {item.description}
                               </p>
                               <div className="sm:col-span-5">
-                                <p className="mono text-pearl/20">{skillsCopy.toolsLabel}</p>
+                                <p className="mono">{skillsCopy.toolsLabel}</p>
                                 <div className="mt-3 flex flex-wrap gap-1.5">
                                   {item.tools.map((tool) => (
                                     <span
                                       key={tool}
-                                      className="rounded-full border border-electric/15 bg-electric/[0.04] px-2.5 py-1 text-[8px] text-electric-soft/55"
+                                      className="rounded-full border border-electric/25 bg-electric/[0.06] px-2.5 py-1 text-[11px] text-electric"
                                     >
                                       {tool}
                                     </span>
                                   ))}
                                 </div>
-                                <p className="mono mt-4 text-pearl/15">{skillsCopy.usedInLabel}</p>
-                                <p className="mt-1.5 text-[9px] leading-relaxed text-pearl/35">
+                                <p className="mono mt-4">{skillsCopy.usedInLabel}</p>
+                                <p className="mt-1.5 text-[12px] leading-relaxed text-pearl/60">
                                   {item.usedIn.join(' · ')}
                                 </p>
                               </div>
@@ -134,12 +134,12 @@ export function Skills() {
             </div>
 
             <Reveal delay={0.1}>
-              <div className="mt-8 grid gap-4 border-t border-pearl/[0.07] pt-6 sm:grid-cols-4">
+              <div className="mt-8 grid gap-4 border-t border-pearl/[0.12] pt-6 sm:grid-cols-4">
                 {skillsCopy.loop.map((item) => (
                   <div key={item.number}>
-                    <span className="font-mono text-[8px] text-electric/50">{item.number}</span>
-                    <p className="mt-2 text-[11px] text-pearl/55">{item.title}</p>
-                    <p className="mt-1 text-[9px] leading-relaxed text-pearl/25">{item.note}</p>
+                    <span className="font-mono text-[11px] text-electric">{item.number}</span>
+                    <p className="mt-2 text-[13px] text-pearl/80">{item.title}</p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-pearl/55">{item.note}</p>
                   </div>
                 ))}
               </div>
@@ -147,17 +147,13 @@ export function Skills() {
           </div>
 
           <Reveal delay={0.06} className="lg:col-span-4">
-            <div className="relative overflow-hidden rounded-[28px] border border-pearl/[0.1] bg-gradient-to-b from-pearl/[0.055] to-pearl/[0.015] p-6 sm:p-7 lg:sticky lg:top-24">
-              <div
-                className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-electric/[0.12] blur-[60px]"
-                aria-hidden="true"
-              />
+            <div className="relative overflow-hidden border border-pearl/[0.14] bg-panel p-6 sm:p-7 lg:sticky lg:top-24">
               <div className="relative">
                 <div className="flex items-center justify-between">
-                  <span className="mono text-pearl/25">{skillsCopy.currentLevel}</span>
+                  <span className="mono">{skillsCopy.currentLevel}</span>
                   <span className="flex items-center gap-1.5">
                     <span className="h-1 w-1 rounded-full bg-electric" />
-                    <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-electric-soft/55">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-electric">
                       {skillsCopy.learning}
                     </span>
                   </span>
@@ -167,26 +163,26 @@ export function Skills() {
                   {skillsCopy.cardTitleLead}{' '}
                   <span className="accent-serif italic text-gradient">{skillsCopy.cardTitleAccent}</span>
                 </h3>
-                <p className="mt-4 text-[0.86rem] leading-[1.75] text-mist">
+                <p className="mt-4 text-[1rem] leading-[1.75] text-mist">
                   {skillsCopy.cardDescription}
                 </p>
 
-                <ul className="mt-6 space-y-2.5 border-t border-pearl/[0.07] pt-5">
+                <ul className="mt-6 space-y-2.5 border-t border-pearl/[0.12] pt-5">
                   {skillsCopy.notes.map((item) => (
-                    <li key={item} className="flex items-center gap-2.5 text-[10px] text-pearl/40">
-                      <span className="h-1 w-1 rounded-full bg-electric/70" />
+                    <li key={item} className="flex items-center gap-2.5 text-[13px] text-pearl/65">
+                      <span className="h-1 w-1 rounded-full bg-electric" />
                       {item}
                     </li>
                   ))}
                 </ul>
 
-                <div className="mt-7 flex items-center justify-between gap-3 rounded-2xl border border-pearl/[0.08] bg-pearl/[0.02] px-4 py-3.5">
+                <div className="mt-7 flex items-center justify-between gap-3 rounded-md border border-pearl/[0.16] bg-ink px-4 py-3.5">
                   <div>
-                    <p className="mono text-pearl/20">{skillsCopy.statusLabel}</p>
-                    <p className="mt-1 text-[10px] text-pearl/55">{common.status}</p>
+                    <p className="mono">{skillsCopy.statusLabel}</p>
+                    <p className="mt-1 text-[13px] text-pearl/75">{common.status}</p>
                   </div>
                   <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-electric/50" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-electric/40" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-electric" />
                   </span>
                 </div>

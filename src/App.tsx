@@ -1,5 +1,4 @@
 import { useI18n } from '@/lib/i18n'
-import { GridBackground } from '@/components/ui/GridBackground'
 import { ScrollProgress } from '@/components/ui/ScrollProgress'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -23,7 +22,6 @@ export default function App() {
         {copy.common.skipToContent}
       </a>
 
-      <GridBackground />
       <ScrollProgress />
       <Navbar />
 

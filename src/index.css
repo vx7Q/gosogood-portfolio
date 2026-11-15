@@ -4,12 +4,20 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
+    --color-ink: 247 245 239;
+    --color-panel: 255 255 255;
+    --color-pearl: 17 17 17;
+    --color-mist: 74 74 70;
+    --color-electric: 33 63 209;
+    --color-electric-soft: 27 50 160;
+    --grid-line: rgba(17, 17, 17, 0.055);
+    --outline-color: rgba(17, 17, 17, 0.32);
   }
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 92px;
+    scroll-padding-top: 88px;
   }
 
   body {
@@ -19,12 +27,12 @@
   }
 
   ::selection {
-    background: rgba(110, 139, 255, 0.35);
-    color: #f2f0e8;
+    background: #2140d4;
+    color: #ffffff;
   }
 
   :focus-visible {
-    outline: 2px solid rgba(110, 139, 255, 0.85);
+    outline: 2px solid #2140d4;
     outline-offset: 3px;
   }
 
@@ -33,36 +41,36 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #07090d;
+    background: #f2efe7;
   }
   ::-webkit-scrollbar-thumb {
-    background: #232a3a;
-    border: 2px solid #07090d;
+    background: #c9c4b8;
+    border: 2px solid #f2efe7;
     border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #303a51;
+    background: #a8a294;
   }
 }
 
 @layer components {
   .container-page {
     width: 100%;
-    max-width: 1320px;
+    max-width: 1760px;
     margin-inline: auto;
-    padding-inline: clamp(1.25rem, 4vw, 3rem);
+    padding-inline: clamp(1.25rem, 4vw, 4.5rem);
   }
 
   .section-space {
-    padding-block: clamp(5rem, 10vw, 8.5rem);
+    padding-block: clamp(5rem, 8vw, 7.5rem);
   }
 
   .section-anchor {
-    scroll-margin-top: 92px;
+    scroll-margin-top: 88px;
   }
 
   .mono {
-    @apply font-mono text-[9px] uppercase tracking-[0.18em] text-pearl/30;
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-pearl/60;
   }
 
   .display {
@@ -81,51 +89,45 @@
 
   .text-outline {
     color: transparent;
-    -webkit-text-stroke: 1px rgba(242, 240, 232, 0.32);
+    -webkit-text-stroke: 1px var(--outline-color);
   }
 
   .text-outline-soft {
     color: transparent;
-    -webkit-text-stroke: 1px rgba(242, 240, 232, 0.16);
+    -webkit-text-stroke: 1px rgba(17, 17, 17, 0.16);
   }
 
   .text-gradient {
-    background: linear-gradient(100deg, #f2f0e8 0%, #dce3ff 36%, #9db2ff 68%, #f2f0e8 100%);
-    background-size: 180% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradient-shift 14s ease-in-out infinite;
+    color: #1c39bd;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
   }
 
   .text-gradient-blue {
-    background: linear-gradient(100deg, #b7c4ff 0%, #6e8bff 54%, #b7c4ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #1c39bd;
+    background: none;
+    -webkit-text-fill-color: currentColor;
   }
 
   .glass {
-    @apply border border-pearl/[0.09] bg-pearl/[0.025];
-    backdrop-filter: blur(16px);
+    @apply border border-pearl/[0.12] bg-panel;
+    box-shadow: 0 1px 2px rgba(17, 17, 17, 0.035);
   }
 
   .glass-strong {
-    @apply border border-pearl/[0.1] bg-panel/90;
-    backdrop-filter: blur(22px);
+    @apply border border-pearl/[0.14] bg-panel;
   }
 
   .bg-grid-lines {
     background-image:
-      linear-gradient(to right, rgba(242, 240, 232, 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(242, 240, 232, 0.045) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 72px 72px;
   }
 
   .grain-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
+    display: none;
   }
 
   .hover-spotlight {
@@ -133,37 +135,22 @@
   }
 
   .hover-spotlight::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(
-      340px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-      rgba(110, 139, 255, 0.13),
-      transparent 62%
-    );
-    opacity: 0;
-    transition: opacity 0.45s ease;
-  }
-
-  .hover-spotlight:hover::before {
-    opacity: 1;
+    content: none;
+    display: none;
   }
 
   .field {
-    @apply w-full rounded-xl border border-pearl/[0.1] bg-pearl/[0.025] px-4 py-3.5 text-sm text-pearl outline-none transition duration-300 placeholder:text-pearl/25;
+    @apply w-full rounded-lg border border-pearl/[0.16] bg-panel px-4 py-3.5 text-[15px] text-pearl outline-none transition duration-300 placeholder:text-pearl/35;
   }
 
   .field:focus {
-    border-color: rgba(110, 139, 255, 0.55);
-    background: rgba(242, 240, 232, 0.045);
-    box-shadow: 0 0 0 4px rgba(110, 139, 255, 0.08);
+    border-color: #2140d4;
+    box-shadow: 0 0 0 3px rgba(33, 64, 212, 0.12);
   }
 
   .field-error {
-    border-color: rgba(251, 113, 133, 0.6) !important;
-    box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.06);
+    border-color: rgba(190, 24, 49, 0.65) !important;
+    box-shadow: 0 0 0 3px rgba(190, 24, 49, 0.08);
   }
 
   .marquee-track {
@@ -179,6 +166,28 @@
 
   .preview-shell {
     container-type: inline-size;
+    --color-ink: 7 9 13;
+    --color-panel: 11 14 20;
+    --color-pearl: 242 240 232;
+    --color-mist: 174 180 192;
+    --color-electric: 110 139 255;
+    --color-electric-soft: 183 196 255;
+    --grid-line: rgba(242, 240, 232, 0.045);
+    --outline-color: rgba(242, 240, 232, 0.32);
+  }
+
+  .preview-shell .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--outline-color);
+  }
+
+  .preview-shell .text-gradient {
+    background: linear-gradient(100deg, #f2f0e8 0%, #dce3ff 36%, #9db2ff 68%, #f2f0e8 100%);
+    background-size: 180% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .link-underline {
@@ -194,9 +203,7 @@
   }
 
   .noise-panel {
-    background-image:
-      radial-gradient(ellipse at 18% 0%, rgba(110, 139, 255, 0.12), transparent 55%),
-      radial-gradient(ellipse at 100% 100%, rgba(110, 139, 255, 0.06), transparent 55%);
+    background-image: none;
   }
 }
 
@@ -251,13 +258,23 @@ html[lang='th'] .display {
   letter-spacing: -0.01em;
 }
 
-html[lang='zh'] .display {
+html[lang^='zh'] .display {
   line-height: 1.12;
   letter-spacing: 0;
 }
 
+/* The hero sets its own tight display leading; Thai and Chinese glyphs still
+   need a little more room than the Latin scale. */
+html[lang='th'] .hero-display {
+  line-height: 1.06;
+}
+
+html[lang^='zh'] .hero-display {
+  line-height: 1.02;
+}
+
 html[lang='th'] .display.brand-wordmark,
-html[lang='zh'] .display.brand-wordmark {
+html[lang^='zh'] .display.brand-wordmark {
   line-height: 0.82;
   letter-spacing: -0.07em;
 }
@@ -268,7 +285,7 @@ html[lang='th'] .accent-serif {
   line-height: 1.24;
 }
 
-html[lang='zh'] .accent-serif {
+html[lang^='zh'] .accent-serif {
   font-family: 'Instrument Serif', 'Noto Serif SC', ui-serif, Georgia, serif;
   font-style: normal;
   line-height: 1.18;
@@ -279,15 +296,21 @@ html[lang='th'] .font-serif {
   font-style: normal;
 }
 
-html[lang='zh'] .font-serif {
+html[lang^='zh'] .font-serif {
   font-family: 'Instrument Serif', 'Noto Serif SC', ui-serif, Georgia, serif;
   font-style: normal;
 }
 
 html[lang='th'] .text-outline,
-html[lang='zh'] .text-outline {
-  color: rgba(242, 240, 232, 0.5);
+html[lang^='zh'] .text-outline {
+  color: rgba(17, 17, 17, 0.44);
   -webkit-text-stroke: 0;
+}
+
+html[lang='th'] .preview-shell .text-outline,
+html[lang^='zh'] .preview-shell .text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(242, 240, 232, 0.32);
 }
 
 html[lang='th'] .mono,
@@ -295,8 +318,8 @@ html[lang='th'] .font-mono {
   letter-spacing: 0.08em;
 }
 
-html[lang='zh'] .mono,
-html[lang='zh'] .font-mono {
+html[lang^='zh'] .mono,
+html[lang^='zh'] .font-mono {
   letter-spacing: 0.08em;
 }
 
@@ -304,7 +327,7 @@ html[lang='th'] .nav-label {
   letter-spacing: 0.02em;
 }
 
-html[lang='zh'] .nav-label {
+html[lang^='zh'] .nav-label {
   letter-spacing: 0.06em;
 }
 
@@ -312,7 +335,7 @@ html[lang='th'] .field {
   line-height: 1.6;
 }
 
-html[lang='zh'] .field {
+html[lang^='zh'] .field {
   line-height: 1.55;
 }
 

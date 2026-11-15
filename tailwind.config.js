@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#07090D',
-        panel: '#0B0E14',
-        pearl: '#F2F0E8',
-        mist: '#AEB4C0',
-        electric: '#6E8BFF',
-        'electric-soft': '#B7C4FF',
+        ink: 'rgb(var(--color-ink) / <alpha-value>)',
+        panel: 'rgb(var(--color-panel) / <alpha-value>)',
+        pearl: 'rgb(var(--color-pearl) / <alpha-value>)',
+        mist: 'rgb(var(--color-mist) / <alpha-value>)',
+        electric: 'rgb(var(--color-electric) / <alpha-value>)',
+        'electric-soft': 'rgb(var(--color-electric-soft) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['"Space Grotesk"', '"Noto Sans Thai"', '"Noto Sans SC"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -38,8 +38,8 @@ export default {
         },
       },
       boxShadow: {
-        soft: '0 30px 90px -30px rgba(0, 0, 0, 0.9)',
-        glow: '0 0 80px -20px rgba(110, 139, 255, 0.5)',
+        soft: '0 18px 50px -28px rgba(17, 17, 17, 0.18)',
+        glow: '0 0 0 1px rgba(33, 63, 209, 0.14)',
       },
     },
   },

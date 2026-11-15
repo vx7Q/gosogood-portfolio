@@ -19,8 +19,8 @@ interface MagneticButtonProps {
 }
 
 const variantStyles: Record<Variant, string> = {
-  primary: 'bg-pearl text-ink hover:bg-pearl/90',
-  secondary: 'border border-pearl/15 bg-pearl/[0.03] text-pearl hover:border-pearl/30 hover:bg-pearl/[0.06]',
+  primary: 'bg-pearl text-ink hover:bg-electric hover:text-white',
+  secondary: 'border border-pearl/30 bg-panel text-pearl hover:border-pearl/60 hover:bg-pearl/[0.04]',
 }
 
 export function MagneticButton({
@@ -54,7 +54,7 @@ export function MagneticButton({
   }
 
   const classes = cn(
-    'group inline-flex h-12 items-center justify-center gap-4 rounded-full pl-5 pr-1.5 text-[12px] font-medium tracking-[-0.01em] transition-colors duration-300 disabled:cursor-wait disabled:opacity-70',
+    'group inline-flex h-12 items-center justify-center gap-4 rounded-full pl-5 pr-1.5 text-[13px] font-medium tracking-[-0.01em] transition-colors duration-300 disabled:cursor-wait disabled:opacity-70',
     variantStyles[variant],
     className,
   )
@@ -66,7 +66,7 @@ export function MagneticButton({
         <span
           className={cn(
             'flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-500 group-hover:rotate-45',
-            variant === 'primary' ? 'bg-ink text-pearl' : 'border border-pearl/10 bg-pearl/[0.04] text-pearl',
+            variant === 'primary' ? 'bg-ink text-pearl' : 'bg-pearl text-ink',
           )}
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />

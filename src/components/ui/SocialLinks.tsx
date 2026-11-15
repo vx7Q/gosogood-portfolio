@@ -7,6 +7,7 @@ interface SocialLinksProps {
   className?: string
   iconClassName?: string
   showLabels?: boolean
+  inverse?: boolean
 }
 
 function XMark({ className }: { className?: string }) {
@@ -30,7 +31,7 @@ const icons = {
   mail: Mail,
 } as const
 
-export function SocialLinks({ className, iconClassName, showLabels = false }: SocialLinksProps) {
+export function SocialLinks({ className, iconClassName, showLabels = false, inverse = false }: SocialLinksProps) {
   const { copy } = useI18n()
 
   return (
@@ -47,10 +48,19 @@ export function SocialLinks({ className, iconClassName, showLabels = false }: So
             rel={isExternal ? 'noreferrer' : undefined}
             aria-label={label}
             className={cn(
-              'group inline-flex items-center gap-2 text-pearl/45 transition-colors duration-300 hover:text-pearl',
+              'group inline-flex items-center gap-2 transition-colors duration-300',
+              inverse
+                ? 'text-white/65 hover:text-white'
+                : 'text-pearl/50 hover:text-pearl',
               showLabels
-                ? 'rounded-full border border-pearl/[0.09] bg-pearl/[0.02] px-3 py-2 text-[9px] uppercase tracking-[0.1em]'
-                : 'h-8 w-8 justify-center rounded-full hover:bg-pearl/[0.06]',
+                ? cn(
+                    'rounded-full border px-3 py-2 text-[11px] uppercase tracking-[0.06em]',
+                    inverse ? 'border-white/25 bg-white/10' : 'border-pearl/[0.14] bg-panel',
+                  )
+                : cn(
+                    'h-8 w-8 justify-center rounded-full',
+                    inverse ? 'hover:bg-white/10' : 'hover:bg-pearl/[0.06]',
+                  ),
               iconClassName,
             )}
           >

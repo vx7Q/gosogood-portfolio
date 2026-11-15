@@ -106,7 +106,7 @@ function PortfolioPreview() {
             </div>
 
             <div className="col-span-5 flex items-start justify-end">
-              <div className="w-full rounded-[2cqw] border border-pearl/[0.1] bg-[#090B11]/90 p-[1.6cqw] shadow-[0_2cqw_6cqw_-2cqw_rgba(0,0,0,0.8)]">
+              <div className="w-full rounded-[2cqw] border border-pearl/[0.1] bg-[#090B11]/[0.90] p-[1.6cqw] shadow-[0_2cqw_6cqw_-2cqw_rgba(0,0,0,0.8)]">
                 <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-[1.2cqw]">
                   <span className="font-mono text-[0.65cqw] uppercase tracking-[0.16em] text-pearl/25">
                     Identity / 2026
@@ -220,7 +220,7 @@ function PassForgePreview() {
                 </span>
               </div>
 
-              <div className="mt-[1.1cqw] rounded-[1.2cqw] border border-pearl/[0.1] bg-[#0B0E14]/95 p-[1.3cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
+              <div className="mt-[1.1cqw] rounded-[1.2cqw] border border-pearl/[0.1] bg-[#0B0E14]/[0.95] p-[1.3cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
                 <div className="flex items-center gap-[0.45cqw] rounded-full border border-pearl/[0.08] bg-pearl/[0.03] p-[0.3cqw] text-[0.62cqw]">
                   <span className="rounded-full bg-pearl px-[1.2cqw] py-[0.35cqw] font-medium text-ink">Password</span>
                   <span className="px-[1cqw] py-[0.35cqw] text-pearl/40">Passphrase</span>
@@ -451,7 +451,7 @@ function WarpPreview() {
             </div>
 
             <div className="col-span-5">
-              <div className="rounded-[1.3cqw] border border-electric/15 bg-[#0A0D14]/95 p-[1.4cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
+              <div className="rounded-[1.3cqw] border border-electric/15 bg-[#0A0D14]/[0.95] p-[1.4cqw] shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.9)]">
                 <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-[0.9cqw]">
                   <span className="font-mono text-[0.55cqw] uppercase tracking-[0.16em] text-pearl/25">
                     Security core

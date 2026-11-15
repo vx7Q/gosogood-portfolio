@@ -69,7 +69,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-ink/80 p-3 backdrop-blur-md sm:p-6"
+          className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-[#111111]/[0.72] p-3 sm:p-6"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) onClose()
           }}
@@ -84,21 +84,21 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.99 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative flex max-h-[94vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-pearl/[0.1] bg-panel shadow-[0_40px_120px_-20px_rgba(0,0,0,0.9)]"
+              className="relative flex max-h-[94vh] w-full max-w-6xl flex-col overflow-hidden border border-pearl/[0.15] bg-panel shadow-[0_40px_120px_-30px_rgba(0,0,0,0.5)]"
             >
-              <div className="flex shrink-0 items-center justify-between border-b border-pearl/[0.07] bg-panel/95 px-5 py-4 backdrop-blur-xl sm:px-8">
+              <div className="flex shrink-0 items-center justify-between border-b border-pearl/[0.12] bg-panel px-5 py-4 sm:px-8">
                 <div className="flex items-center gap-3">
-                  <span className="mono text-pearl/25">
+                  <span className="mono text-pearl/55">
                     {labels.caseStudy} / {project.index}
                   </span>
-                  <span className="h-1 w-1 rounded-full bg-electric shadow-[0_0_8px_#6E8BFF]" />
-                  <span className="mono text-pearl/15">{project.year}</span>
+                  <span className="h-1.5 w-1.5 bg-electric" />
+                  <span className="mono">{project.year}</span>
                 </div>
                 <button
                   ref={closeRef}
                   type="button"
                   onClick={onClose}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-pearl/[0.1] bg-pearl/[0.03] text-pearl/50 transition-colors hover:border-pearl/25 hover:text-pearl"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-pearl/[0.16] bg-panel text-pearl/60 transition-colors hover:border-pearl/40 hover:text-pearl"
                   aria-label={modal.close}
                 >
                   <X className="h-4 w-4" strokeWidth={1.6} />
@@ -114,8 +114,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           className={cn(
                             'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1',
                             project.retired
-                              ? 'border-pearl/[0.1] bg-pearl/[0.03]'
-                              : 'border-electric/20 bg-electric/[0.06]',
+                              ? 'border-pearl/[0.16] bg-panel'
+                              : 'border-electric/30 bg-electric/[0.06]',
                           )}
                         >
                           <span
@@ -126,22 +126,22 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           />
                           <span
                             className={cn(
-                              'font-mono text-[7px] uppercase tracking-[0.12em]',
-                              project.retired ? 'text-pearl/40' : 'text-electric-soft/70',
+                              'font-mono text-[10px] uppercase tracking-[0.06em]',
+                              project.retired ? 'text-pearl/55' : 'text-electric',
                             )}
                           >
                             {project.status}
                           </span>
                         </span>
-                        <span className="mono text-pearl/20">{project.subtitle}</span>
+                        <span className="mono text-pearl/45">{project.subtitle}</span>
                       </div>
                       <h2
                         id="project-modal-title"
-                        className="display mt-4 text-[clamp(2.1rem,4.5vw,3.8rem)] leading-[0.95] tracking-[-0.045em] text-pearl"
+                        className="display mt-4 text-[clamp(2.2rem,4.5vw,4rem)] leading-[0.95] tracking-[-0.045em] text-pearl"
                       >
                         {project.title}
                       </h2>
-                      <p className="mt-4 max-w-xl text-pretty text-[0.9rem] leading-[1.75] text-mist">
+                      <p className="mt-4 max-w-xl text-pretty text-[1rem] leading-[1.75] text-mist">
                         {project.description}
                       </p>
                     </div>
@@ -151,7 +151,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                         href={project.live}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-10 items-center gap-2 rounded-full bg-pearl px-4 text-[10px] font-medium text-ink transition-colors hover:bg-white"
+                        className="inline-flex h-10 items-center gap-2 rounded-full bg-pearl px-4 text-[12px] font-medium text-ink transition-colors hover:bg-electric hover:text-white"
                       >
                         {project.retired ? labels.visitArchive : labels.liveSite}
                         <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
@@ -161,7 +161,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           href={project.repo}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex h-10 items-center gap-2 rounded-full border border-pearl/[0.12] bg-pearl/[0.03] px-4 text-[10px] text-pearl/60 transition-colors hover:border-pearl/25 hover:text-pearl"
+                          className="inline-flex h-10 items-center gap-2 rounded-full border border-pearl/[0.2] bg-panel px-4 text-[12px] text-pearl/70 transition-colors hover:border-pearl/45 hover:text-pearl"
                         >
                           <Github className="h-3.5 w-3.5" strokeWidth={1.6} />
                           {labels.source}
@@ -175,25 +175,25 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <div className="mt-10 grid gap-10 lg:grid-cols-12">
                     <div className="space-y-8 lg:col-span-7">
                       <section>
-                        <h3 className="mono text-pearl/25">{modal.brief}</h3>
-                        <p className="mt-3 text-pretty text-[0.9rem] leading-[1.8] text-mist">
+                        <h3 className="mono text-pearl/55">{modal.brief}</h3>
+                        <p className="mt-3 text-pretty text-[0.98rem] leading-[1.8] text-mist">
                           {project.caseStudy.brief}
                         </p>
                       </section>
 
                       <section>
-                        <h3 className="mono text-pearl/25">{modal.built}</h3>
-                        <p className="mt-3 text-pretty text-[0.9rem] leading-[1.8] text-mist">
+                        <h3 className="mono text-pearl/55">{modal.built}</h3>
+                        <p className="mt-3 text-pretty text-[0.98rem] leading-[1.8] text-mist">
                           {project.caseStudy.built}
                         </p>
                       </section>
 
                       <section>
-                        <h3 className="mono text-pearl/25">{modal.decisions}</h3>
+                        <h3 className="mono text-pearl/55">{modal.decisions}</h3>
                         <ul className="mt-3 space-y-2.5">
                           {project.caseStudy.decisions.map((decision) => (
-                            <li key={decision} className="flex gap-3 text-[0.86rem] leading-relaxed text-pearl/55">
-                              <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric/70" />
+                            <li key={decision} className="flex gap-3 text-[0.94rem] leading-relaxed text-pearl/70">
+                              <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-electric" />
                               {decision}
                             </li>
                           ))}
@@ -202,13 +202,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     </div>
 
                     <aside className="space-y-4 lg:col-span-5">
-                      <div className="glass rounded-2xl p-5">
-                        <p className="mono text-pearl/20">{modal.stack}</p>
+                      <div className="glass p-5">
+                        <p className="mono">{modal.stack}</p>
                         <div className="mt-3 flex flex-wrap gap-1.5">
                           {project.caseStudy.stack.map((item) => (
                             <span
                               key={item}
-                              className="rounded-full border border-pearl/[0.08] bg-pearl/[0.03] px-2.5 py-1 text-[9px] text-pearl/50"
+                              className="rounded-full border border-pearl/[0.14] bg-ink px-2.5 py-1 text-[11px] text-pearl/70"
                             >
                               {item}
                             </span>
@@ -216,19 +216,19 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                         </div>
                       </div>
 
-                      <div className="glass rounded-2xl p-5">
-                        <p className="mono text-pearl/20">{modal.learned}</p>
-                        <p className="mt-3 text-[0.86rem] leading-[1.75] text-pearl/50">
+                      <div className="glass p-5">
+                        <p className="mono">{modal.learned}</p>
+                        <p className="mt-3 text-[0.94rem] leading-[1.75] text-mist">
                           {project.caseStudy.learned}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-electric/10 bg-electric/[0.025] p-5">
-                        <p className="mono text-electric-soft/40">{modal.notes}</p>
+                      <div className="border border-electric/25 bg-electric/[0.05] p-5">
+                        <p className="mono text-electric">{modal.notes}</p>
                         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
                           {project.facts.map((fact) => (
-                            <span key={fact} className="flex items-center gap-1.5 text-[9px] text-pearl/35">
-                              <span className="h-1 w-1 rounded-full bg-electric/60" />
+                            <span key={fact} className="flex items-center gap-1.5 text-[11px] text-pearl/65">
+                              <span className="h-1 w-1 rounded-full bg-electric" />
                               {fact}
                             </span>
                           ))}
@@ -237,14 +237,14 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     </aside>
                   </div>
 
-                  <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-pearl/[0.07] pt-5">
-                    <span className="mono text-pearl/15">
+                  <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-pearl/[0.12] pt-5">
+                    <span className="mono">
                       {modal.builtInPublic} / {project.year}
                     </span>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="text-[9px] uppercase tracking-[0.14em] text-pearl/30 underline-offset-4 transition-colors hover:text-pearl/60 hover:underline"
+                      className="text-[11px] uppercase tracking-[0.1em] text-pearl/55 underline-offset-4 transition-colors hover:text-pearl hover:underline"
                     >
                       {modal.close}
                     </button>

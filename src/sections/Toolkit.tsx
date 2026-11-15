@@ -52,25 +52,25 @@ export function Toolkit() {
 
         <div className="mt-14 grid gap-5 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
-            <div className="glass relative overflow-hidden rounded-[28px] p-6 sm:p-7 lg:sticky lg:top-24">
+            <div className="glass relative overflow-hidden p-6 sm:p-7 lg:sticky lg:top-24">
               <div className="flex items-center justify-between">
-                <span className="mono text-pearl/25">{toolkit.coreTools}</span>
-                <span className="mono text-pearl/15">2026</span>
+                <span className="mono">{toolkit.coreTools}</span>
+                <span className="mono text-pearl/45">2026</span>
               </div>
               <p className="display mt-6 text-[6.5rem] leading-[0.8] tracking-[-0.07em] text-gradient">
                 {toolCount}
               </p>
-              <p className="mt-5 max-w-xs text-[0.88rem] leading-[1.75] text-mist">
+              <p className="mt-5 max-w-xs text-[0.98rem] leading-[1.75] text-mist">
                 {toolkit.coreNote}
               </p>
 
-              <div className="mt-7 border-t border-pearl/[0.07] pt-5">
-                <p className="mono text-pearl/20">{toolkit.craftLabel}</p>
+              <div className="mt-7 border-t border-pearl/[0.12] pt-5">
+                <p className="mono">{toolkit.craftLabel}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {toolkit.craft.map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-pearl/[0.08] bg-pearl/[0.025] px-2.5 py-1 text-[8px] uppercase tracking-[0.1em] text-pearl/40"
+                      className="rounded-full border border-pearl/[0.18] bg-panel px-2.5 py-1 text-[11px] text-pearl/70"
                     >
                       {item}
                     </span>
@@ -78,12 +78,12 @@ export function Toolkit() {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-electric/10 bg-electric/[0.03] p-4">
-                <p className="mono text-electric-soft/50">{toolkit.learningNow}</p>
+              <div className="mt-6 border border-electric/20 bg-electric/[0.04] p-4">
+                <p className="mono text-electric">{toolkit.learningNow}</p>
                 <ul className="mt-2 space-y-1.5">
                   {about.focus.map((item) => (
-                    <li key={item.title} className="flex items-center gap-2 text-[10px] text-pearl/45">
-                      <span className="h-1 w-1 shrink-0 rounded-full bg-electric/70" />
+                    <li key={item.title} className="flex items-center gap-2 text-[12px] text-pearl/65">
+                      <span className="h-1 w-1 shrink-0 rounded-full bg-electric" />
                       {item.title}
                     </li>
                   ))}
@@ -97,25 +97,25 @@ export function Toolkit() {
               const groupCopy = toolkit.groups[group.id]
               return (
                 <Reveal key={group.id} delay={groupIndex * 0.06}>
-                  <div className="glass rounded-[24px] p-5 sm:p-6">
-                    <div className="flex items-center justify-between border-b border-pearl/[0.07] pb-4">
-                      <span className="mono text-pearl/40">{groupCopy.label}</span>
-                      <span className="mono text-pearl/15">0{group.items.length}</span>
+                  <div className="glass p-5 sm:p-6">
+                    <div className="flex items-center justify-between border-b border-pearl/[0.12] pb-4">
+                      <span className="mono text-pearl/70">{groupCopy.label}</span>
+                      <span className="mono text-pearl/40">0{group.items.length}</span>
                     </div>
                     <div className="mt-4 grid gap-2 sm:grid-cols-2">
                       {group.items.map((item, index) => (
                         <div
                           key={item.name}
-                          className="group flex items-center gap-3 rounded-2xl border border-pearl/[0.06] bg-pearl/[0.015] p-3 transition-colors duration-300 hover:border-pearl/[0.14] hover:bg-pearl/[0.04]"
+                          className="group flex items-center gap-3 rounded-lg border border-pearl/[0.12] bg-panel p-3 transition-colors duration-300 hover:border-electric/40"
                         >
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-pearl/[0.08] bg-panel">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-pearl/[0.12] bg-ink">
                             {toolIcons[item.icon]}
                           </span>
                           <div className="min-w-0">
-                            <p className="truncate text-[12px] text-pearl">{item.name}</p>
-                            <p className="mt-0.5 truncate text-[9px] text-pearl/30">{notes[item.icon]}</p>
+                            <p className="truncate text-[15px] text-pearl">{item.name}</p>
+                            <p className="mt-0.5 truncate text-[12px] text-pearl/55">{notes[item.icon]}</p>
                           </div>
-                          <span className="ml-auto font-mono text-[7px] text-pearl/10 transition-colors group-hover:text-electric/60">
+                          <span className="ml-auto font-mono text-[10px] text-pearl/40 transition-colors group-hover:text-electric">
                             0{index + 1}
                           </span>
                         </div>
